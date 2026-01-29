@@ -11,7 +11,10 @@
 *.sln.docstates
 
 # App settings (do not commit secrets)
-appsettings*.json
+appsettings.json
+
+# EF Core factory class
+MyBot.Data/MyBotDBContextFactory.cs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -364,3 +367,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MyBot/appsettings.json
+/MyBot/appsettings.json
