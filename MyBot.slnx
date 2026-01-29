@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MyBot.Data.Models/MyBot.Data.Models.csproj" />
+  <Project Path="MyBot.Data/MyBot.Data.csproj" />
+  <Project Path="MyBot.GCommon/MyBot.GCommon.csproj" />
+  <Project Path="MyBot/MyBot.csproj" />
+</Solution>
