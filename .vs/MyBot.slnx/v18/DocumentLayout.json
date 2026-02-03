@@ -1,0 +1,102 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BBC851EA-08EE-6F2E-9DD5-947CABDE3301}|MyBot\\MyBot.csproj|c:\\users\\merte\\documents\\github\\mybot\\mybot\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BBC851EA-08EE-6F2E-9DD5-947CABDE3301}|MyBot\\MyBot.csproj|solutionrelative:mybot\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{515D562C-6ABF-1506-34B7-3BE8450E77B3}|MyBot.Data\\MyBot.Data.csproj|c:\\users\\merte\\documents\\github\\mybot\\mybot.data\\mybotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{515D562C-6ABF-1506-34B7-3BE8450E77B3}|MyBot.Data\\MyBot.Data.csproj|solutionrelative:mybot.data\\mybotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8E7621E-47D0-49D4-2B10-89D31AA06F9C}|MyBot.GCommon\\MyBot.GCommon.csproj|c:\\users\\merte\\documents\\github\\mybot\\mybot.gcommon\\validationconstraints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8E7621E-47D0-49D4-2B10-89D31AA06F9C}|MyBot.GCommon\\MyBot.GCommon.csproj|solutionrelative:mybot.gcommon\\validationconstraints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BBC851EA-08EE-6F2E-9DD5-947CABDE3301}|MyBot\\MyBot.csproj|c:\\users\\merte\\documents\\github\\mybot\\mybot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBC851EA-08EE-6F2E-9DD5-947CABDE3301}|MyBot\\MyBot.csproj|solutionrelative:mybot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB9AFFA5-8B81-2A1C-6CB2-E17D91603B93}|MyBot.Data.Models\\MyBot.Data.Models.csproj|c:\\users\\merte\\documents\\github\\mybot\\mybot.data.models\\models\\applications.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB9AFFA5-8B81-2A1C-6CB2-E17D91603B93}|MyBot.Data.Models\\MyBot.Data.Models.csproj|solutionrelative:mybot.data.models\\models\\applications.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "MyBot\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot\\appsettings.Development.json",
+              "RelativeToolTip": "MyBot\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-30T20:42:15.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ValidationConstraints.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot.GCommon\\ValidationConstraints.cs",
+              "RelativeDocumentMoniker": "MyBot.GCommon\\ValidationConstraints.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot.GCommon\\ValidationConstraints.cs",
+              "RelativeToolTip": "MyBot.GCommon\\ValidationConstraints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T20:41:45.945Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Applications.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot.Data.Models\\Models\\Applications.cs",
+              "RelativeDocumentMoniker": "MyBot.Data.Models\\Models\\Applications.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot.Data.Models\\Models\\Applications.cs",
+              "RelativeToolTip": "MyBot.Data.Models\\Models\\Applications.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T20:41:40.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot\\Program.cs",
+              "RelativeDocumentMoniker": "MyBot\\Program.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot\\Program.cs",
+              "RelativeToolTip": "MyBot\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T11:45:50.401Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MyBotDBContext.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot.Data\\MyBotDBContext.cs",
+              "RelativeDocumentMoniker": "MyBot.Data\\MyBotDBContext.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\MyBot\\MyBot.Data\\MyBotDBContext.cs",
+              "RelativeToolTip": "MyBot.Data\\MyBotDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T11:45:41.78Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
