@@ -1,0 +1,22 @@
+﻿using MyBotApi.Data.Models.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyBotApi.Data.Repositories.IRepositories
+{
+    public interface IUserRepository
+    {
+        Task<User?> GetByIdAsync(int id);
+        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByNhostIdAsync(string nhostUserId);
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<IEnumerable<User>> GetByRoleAsync(string role);
+        Task<User> CreateAsync(User user);
+        Task<User> UpdateAsync(User user);
+        Task<bool> DeleteAsync(int id);
+        Task<bool> ExistsAsync(string email);
+    }
+}

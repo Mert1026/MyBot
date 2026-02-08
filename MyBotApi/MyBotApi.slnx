@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="MyBotApi.Data.Models/MyBotApi.Data.Models.csproj" />
+  <Project Path="MyBotApi.Data/MyBotApi.Data.csproj" />
+  <Project Path="MyBotApi.GCommon/MyBotApi.GCommon.csproj" Id="9807bda8-e93e-4c0e-89c8-a2e99d907721" />
+  <Project Path="MyBotApi.Services/MyBotApi.Services.csproj" />
+  <Project Path="MyBotApi/MyBotApi.csproj" />
+</Solution>
