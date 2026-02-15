@@ -49,6 +49,7 @@ namespace MyBotApi.Data
                     .WithMany(g => g.Members)
                     .HasForeignKey(e => e.GroupId)
                     .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             });
 
@@ -64,6 +65,7 @@ namespace MyBotApi.Data
                     .WithMany(u => u.Groups)
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             });
 
 

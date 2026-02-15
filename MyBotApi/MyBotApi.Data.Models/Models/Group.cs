@@ -21,8 +21,8 @@ namespace MyBotApi.Data.Models.Models
         public string EndAsHour { get; set; } = null!;
         public ICollection<Member> Members { get; set; }
         public User User { get; set; }
-        public int UserId { get; set; }
-        
+        public Guid UserId { get; set; }
+        public bool IsDeleted { get; set; }
 
     }
 }

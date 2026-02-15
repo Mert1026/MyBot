@@ -10,13 +10,13 @@ namespace MyBotApi.Data.Models.Models
     public class RefreshToken
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Token { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         public DateTime ExpiresAt { get; set; }
 

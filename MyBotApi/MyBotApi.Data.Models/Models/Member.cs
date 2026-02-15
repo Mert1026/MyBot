@@ -21,8 +21,9 @@ namespace MyBotApi.Data.Models.Models
         [Column(TypeName = "timestamptz")]
         public DateTimeOffset EndTime { get; set; }
         public bool Status { get; set; }
-
         public Group Group { get; set; }
         public Guid GroupId { get; set; }
+        public bool IsDeleted { get; set; }
+
     }
 }

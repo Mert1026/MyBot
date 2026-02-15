@@ -9,14 +9,14 @@ namespace MyBotApi.Data.Repositories.IRepositories
 {
     public interface IUserRepository
     {
-        Task<User?> GetByIdAsync(int id);
+        Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByNhostIdAsync(string nhostUserId);
         Task<IEnumerable<User>> GetAllAsync();
         Task<IEnumerable<User>> GetByRoleAsync(string role);
         Task<User> CreateAsync(User user);
         Task<User> UpdateAsync(User user);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(Guid id);
         Task<bool> ExistsAsync(string email);
     }
 }

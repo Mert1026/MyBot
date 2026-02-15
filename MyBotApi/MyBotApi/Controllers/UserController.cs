@@ -222,7 +222,7 @@ namespace MyBotApi.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<ApiResponse<object>>> DeleteUser(int id)
+        public async Task<ActionResult<ApiResponse<object>>> DeleteUser(Guid id)
         {
             try
             {
