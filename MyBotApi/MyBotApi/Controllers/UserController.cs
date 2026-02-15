@@ -255,13 +255,13 @@ namespace MyBotApi.Controllers
         }
 
 
-        //problematicno -- razgleday jwt transfera
-        [Authorize]
-        [HttpGet("debug/claims")]
-        public IActionResult DebugClaims()
-        {
-            return Ok(User.Claims.Select(c => new { c.Type, c.Value }));
-        }
+        ////problematicno -- razgleday jwt transfera
+        //[Authorize]
+        //[HttpGet("debug/claims")]
+        //public IActionResult DebugClaims()
+        //{
+        //    return Ok(User.Claims.Select(c => new { c.Type, c.Value }));
+        //}
 
 
         //obiknoven user!

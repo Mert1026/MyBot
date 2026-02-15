@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MyBotApi.Data.Models.Models;
 using MyBotApi.Data.Repositories.IRepositories;
 using System;
@@ -18,9 +19,37 @@ namespace MyBotApi.Data.Repositories
         }
         public async Task<Group> CreateAsync(Group group)
         {
-            _context.Groups.Add(group);
-            await _context.SaveChangesAsync();
-            return group;
+            try
+            {
+                _context.Groups.Add(group);
+                await _context.SaveChangesAsync();
+                return group;
+            }
+            catch (Exception ex)
+            {
+                if(ex.InnerException != null)
+                {
+                    if (ex.InnerException.ToString().Contains("duplicate"))
+                    {
+                        throw new Exception("A group with the same name already exists.");
+                    }
+                    else if (ex.InnerException.ToString().Contains("User"))
+                    {
+                        throw new Exception("The specified user does not exist.");
+                    }
+                    else
+                    {
+                        throw new Exception("An error occurred while creating the group: " + ex.Message);
+                    }
+                }
+                else
+                {
+                    throw new Exception("An error occurred while creating the group: " + ex.Message);
+
+                }
+                
+
+            }
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -56,6 +85,12 @@ namespace MyBotApi.Data.Repositories
         {
             return await _context.Groups
             .FirstOrDefaultAsync(g => g.Id == id);
+        }
+
+        public async Task<Group?> GetByNameAsync(string name)
+        {
+            return await _context.Groups
+            .FirstOrDefaultAsync(g => g.Name == name);
         }
 
         public async Task<Group> UpdateAsync(Group group)

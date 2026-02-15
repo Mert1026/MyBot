@@ -10,10 +10,11 @@ namespace MyBotApi.Data.Repositories.IRepositories
     public interface IGroupRepository
     {
         Task<Group?> GetByIdAsync(Guid id);
+        Task<Group?> GetByNameAsync(string name);
         Task<IEnumerable<Group>> GetAllAsync();
         Task<Group> CreateAsync(Group group);
         Task<Group> UpdateAsync(Group group);
         Task<bool> DeleteAsync(Guid id);
-        public Task<bool> SoftDeleteAsync(Guid id);
+        Task<bool> SoftDeleteAsync(Guid id);
     }
 }
