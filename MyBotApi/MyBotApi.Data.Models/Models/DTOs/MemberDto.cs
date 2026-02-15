@@ -9,12 +9,8 @@ namespace MyBotApi.Data.Models.Models.DTOs
 {
     public class MemberDto
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTimeOffset JoinTime { get; set; }
         public string GroupId { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool Status { get; set; }
     }
 }

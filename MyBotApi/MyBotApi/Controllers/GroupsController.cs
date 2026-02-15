@@ -186,11 +186,23 @@ namespace MyBotApi.Controllers
                 existingGroup.Name = groupDto.Name;
                 existingGroup.Description = groupDto.Description;
                 await _groupRepository.UpdateAsync(existingGroup);
+                Group toShow = new Group()
+                {
+                    Id = existingGroup.Id,
+                    Name = existingGroup.Name,
+                    Description = existingGroup.Description,
+                    CreatedAt = existingGroup.CreatedAt,
+                    StartAsHour = existingGroup.StartAsHour,
+                    EndAsHour = existingGroup.EndAsHour,
+                    UserId = existingGroup.UserId,
+                    IsDeleted = existingGroup.IsDeleted,
+                    Members = null
+                };
                 return Ok(new ApiResponse<Group>
                 {
                     Success = true,
                     Message = "Group updated successfully",
-                    Data = existingGroup
+                    Data = toShow
                 });
             }
             catch (Exception ex)

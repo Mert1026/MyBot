@@ -46,9 +46,7 @@ namespace MyBotApi.Data.Repositories
                 {
                     throw new Exception("An error occurred while creating the group: " + ex.Message);
 
-                }
-                
-
+                }   
             }
         }
 

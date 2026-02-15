@@ -15,5 +15,6 @@ namespace MyBotApi.Data.Repositories.IRepositories
         Task<Member> UpdateAsync(Member group);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> SoftDeleteAsync(Guid id);
+        Task<bool> ChangeStatusAsync(Guid id, bool status);
     }
 }

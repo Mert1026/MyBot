@@ -16,6 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+     //.AddJsonOptions(options =>
+     //{
+     //    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+     //    options.JsonSerializerOptions.MaxDepth = 64; // optional, default is 32
+     //});
 builder.Services.AddEndpointsApiExplorer();
 
 // Database - vnimavay s conection string-a

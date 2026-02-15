@@ -21,7 +21,7 @@ namespace MyBotApi.Data.Repositories
         {
             _context.Members.Add(member);
             await _context.SaveChangesAsync();
-            return member;
+            return member;            
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -64,6 +64,19 @@ namespace MyBotApi.Data.Repositories
             _context.Members.Update(member);
             await _context.SaveChangesAsync();
             return member;
+        }
+
+        public async Task<bool> ChangeStatusAsync(Guid id, bool status)
+        {
+            Member? userCheck = _context.Members.FirstOrDefault(m => m.Id == id);
+            if (userCheck != null)
+            {
+                userCheck.Status = status;
+                _context.Members.Update(userCheck);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
         }
     }
 }
