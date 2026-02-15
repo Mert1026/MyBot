@@ -1,18 +1,22 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY *.csproj ./
-RUN dotnet restore
+COPY MyBot/MyBotApi/MyBotApi/MyBotApi.csproj MyBot/MyBotApi/MyBotApi/
 
-COPY . ./
+RUN dotnet restore MyBot/MyBotApi/MyBotApi/MyBotApi.csproj
+
+COPY . .
+
+WORKDIR /src/MyBot/MyBotApi/MyBotApi
 RUN dotnet publish -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 COPY --from=build /app/publish .
 
-ENV ASPNETCORE_URLS=http://+:10000
-EXPOSE 10000
+ENV ASPNETCORE_URLS=http://+:$PORT
 
-ENTRYPOINT ["dotnet", "MyBot.Api.dll"]
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "MyBotApi.dll"]
