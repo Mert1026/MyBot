@@ -30,6 +30,8 @@ namespace MyBotApi.Services.AuthServices
             _logger = logger;
         }
 
+
+        //Samo za testovete!
         public NhostAuthService(
             IConfiguration configuration,
             IUserRepository userRepository,

@@ -64,12 +64,9 @@ public class AuthServiceTests
             _configMock.Object,
             _userRepoMock.Object,
             _loggerMock.Object,
-            httpClient);  // ← requires the constructor overload shown below
+            httpClient);
     }
 
-    /// <summary>
-    /// Serialises a fake Nhost sign-up/sign-in response payload.
-    /// </summary>
     private static string MakeNhostSessionJson(
         string accessToken = "acc",
         string refreshToken = "ref",
@@ -112,29 +109,6 @@ public class AuthServiceTests
         _userRepoMock = new Mock<IUserRepository>();
         _loggerMock = new Mock<ILogger<NhostAuthService>>();
     }
-
-    // ─────────────────────────────────────────────────────────────────────
-    // NOTE: NhostAuthService currently creates its own HttpClient internally.
-    // To make it fully testable without a network, add this constructor
-    // overload to NhostAuthService.cs:
-    //
-    //   internal NhostAuthService(
-    //       IConfiguration configuration,
-    //       IUserRepository userRepository,
-    //       ILogger<NhostAuthService> logger,
-    //       HttpClient httpClient)        // <-- injected for tests
-    //   {
-    //       _httpClient   = httpClient;
-    //       _nhostAuthUrl = configuration["NHost:AuthUrl"] ?? "...";
-    //       _userRepository = userRepository;
-    //       _logger       = logger;
-    //   }
-    //
-    // Mark it `internal` and add `[assembly: InternalsVisibleTo("YourTests")]`
-    // to your main project so only the test assembly can use it.
-    // ─────────────────────────────────────────────────────────────────────
-
-    // ── SignUpAsync ────────────────────────────────────────────────────────
 
     [Test]
     public async Task SignUpAsync_NewUser_CallsNhostAndCreatesUserInDb()
@@ -234,8 +208,6 @@ public class AuthServiceTests
         _userRepoMock.Verify(r => r.CreateAsync(It.IsAny<User>()), Times.Never);
     }
 
-    // ── SignInAsync ────────────────────────────────────────────────────────
-
     [Test]
     public async Task SignInAsync_ExistingUser_UpdatesAndReturnsAuthResponse()
     {
@@ -295,8 +267,6 @@ public class AuthServiceTests
         Assert.ThrowsAsync<Exception>(() =>
             svc.SignInAsync(new SignInRequest { Email = "a@t.com", Password = "wrong" }));
     }
-
-    // ── VerifyTokenAsync ───────────────────────────────────────────────────
 
     [Test]
     public async Task VerifyTokenAsync_NonEmptyToken_ReturnsTrue()
