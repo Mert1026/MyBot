@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboLearn - Robotics Education</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <svg class="logo-icon" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M15 25 L20 20 L25 25 L30 20 L35 25" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <circle cx="20" cy="30" r="2" fill="currentColor"/>
+                    <circle cx="30" cy="30" r="2" fill="currentColor"/>
+                </svg>
+                <span class="logo-text">RoboLearn</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#courses" class="nav-link">Courses</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li class="protected-nav hidden"><a href="#dashboard" class="nav-link">Dashboard</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+                <div class="user-menu hidden" id="userMenu">
+                    <button class="user-avatar" id="userAvatar"><span id="userInitials">U</span></button>
+                    <div class="dropdown-menu">
+                        <div class="user-info">
+                            <p class="user-name" id="userName">User</p>
+                            <p class="user-email" id="userEmail">user@email.com</p>
+                            <p class="user-role" id="userRole">Role</p>
+                        </div>
+                        <hr>
+                        <button class="dropdown-item logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="grid-overlay"></div>
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+        <div class="container hero-content">
+            <h1 class="hero-title">
+                <span class="title-line">Build The</span>
+                <span class="title-line highlight">Future</span>
+                <span class="title-line">With Robotics</span>
+            </h1>
+            <p class="hero-subtitle">Transform your creativity into reality through hands-on robotics education</p>
+            <div class="hero-actions">
+                <button class="btn btn-hero" id="heroGetStarted">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="courses" id="courses">
+        <div class="container">
+            <h2 class="section-title">Our Programs</h2>
+            <p class="section-subtitle">Explore our comprehensive robotics curriculum</p>
+            <div class="courses-grid" id="coursesGrid">
+                <div class="course-card">
+                    <div class="course-icon">🤖</div>
+                    <h3>Loading courses...</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">Why Choose RoboLearn?</h2>
+            <p class="about-text">Building the next generation of innovators and engineers</p>
+        </div>
+    </section>
+
+    <section class="dashboard hidden" id="dashboard">
+        <div class="container">
+            <h2 class="section-title">Dashboard</h2>
+            <div class="dashboard-content" id="dashboardContent"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 RoboLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeLoginModal">&times;</button>
+            <h2 class="modal-title">Welcome Back</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
+                </div>
+                <div class="form-error hidden" id="loginError"></div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeSignupModal">&times;</button>
+            <h2 class="modal-title">Join RoboLearn</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required minlength="8">
+                </div>
+                <div class="form-group">
+                    <label for="signupDisplayName">Display Name</label>
+                    <input type="text" id="signupDisplayName" name="signupDisplayName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupRole">Role</label>
+                    <select id="signupRole" name="signupRole" required>
+                        <option value="">Select Role</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-error hidden" id="signupError"></div>
+                <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scripts - MUST be in this order -->
+    <script src="src/js/api.js"></script>
+    <script src="src/js/auth.js"></script>
+    <script src="src/js/dashboard.js"></script>
+    <script src="src/js/app.js"></script>
+
+    <!-- Debug Script -->
+    <script>
+        // Debug: Log when page loads
+        console.log('✅ Page loaded');
+        console.log('✅ API loaded:', typeof api);
+        console.log('✅ Auth loaded:', typeof auth);
+        console.log('✅ Dashboard loaded:', typeof dashboard);
+        
+        // Check if all scripts loaded
+        if (typeof api === 'undefined') console.error('❌ api.js not loaded!');
+        if (typeof auth === 'undefined') console.error('❌ auth.js not loaded!');
+        if (typeof dashboard === 'undefined') console.error('❌ dashboard.js not loaded!');
+    </script>
+</body>
+</html>
