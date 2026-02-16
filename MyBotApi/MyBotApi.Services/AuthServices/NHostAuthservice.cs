@@ -101,7 +101,8 @@ namespace MyBotApi.Services.AuthServices
                     Role = request.Role,
                     NhostUserId = nhostResponse?.Session?.User?.Id,
                     EmailVerified = nhostResponse?.Session?.User?.EmailVerified ?? false,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    ImageLink = request.ImageLink,
                 };
 
                 await _userRepository.CreateAsync(user);
@@ -119,7 +120,8 @@ namespace MyBotApi.Services.AuthServices
                         Email = user.Email,
                         DisplayName = user.DisplayName,
                         Role = user.Role,
-                        EmailVerified = user.EmailVerified
+                        EmailVerified = user.EmailVerified,
+                        ImageLink= user.ImageLink,
                     }
                 };
             }

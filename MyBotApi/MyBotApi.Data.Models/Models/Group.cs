@@ -14,6 +14,7 @@ namespace MyBotApi.Data.Models.Models
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
+        public string ImageLink { get; set; }
 
         [Column(TypeName = "timestamptz")]
         public DateTimeOffset CreatedAt { get; set; }

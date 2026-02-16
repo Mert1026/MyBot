@@ -12,5 +12,6 @@ namespace MyBotApi.Data.Models.Models.NHostModels
         public string Password { get; set; }
         public string DisplayName { get; set; }
         public string Role { get; set; }
+        public string ImageLink { get; set; }
     }
 }

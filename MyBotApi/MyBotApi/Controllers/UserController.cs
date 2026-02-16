@@ -253,52 +253,5 @@ namespace MyBotApi.Controllers
                 });
             }
         }
-
-
-        ////problematicno -- razgleday jwt transfera
-        //[Authorize]
-        //[HttpGet("debug/claims")]
-        //public IActionResult DebugClaims()
-        //{
-        //    return Ok(User.Claims.Select(c => new { c.Type, c.Value }));
-        //}
-
-
-        //obiknoven user!
-        [HttpGet("classes")]
-        [Authorize(Roles = "admin,teacher")]
-        public ActionResult<ApiResponse<object>> GetClasses()
-        {
-            var userRole = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
-
-            return Ok(new ApiResponse<object>
-            {
-                Success = true,
-                Message = $"Classes retrieved for {userRole}",
-                Data = new
-                {
-                    classes = new[] { "Math 101", "Science 201", "History 301" }
-                }
-            });
-        }
-
-        //hardcoded - TODO
-        [HttpGet("public-info")]
-        [AllowAnonymous]
-        public ActionResult<ApiResponse<object>> GetPublicInfo()
-        {
-            return Ok(new ApiResponse<object>
-            {
-                Success = true,
-                Message = "Public information",
-                Data = new
-                {
-                    schoolName = "Example School",
-                    address = "123 Main St",
-                    phone = "555-0100",
-                    email = "info@example.com"
-                }
-            });
-        }
     }
 }

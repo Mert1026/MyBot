@@ -160,8 +160,6 @@ public class GroupRepoTests
         Assert.That((await _context.Groups.FindAsync(group.Id))!.Name, Is.EqualTo("UpdatedName"));
     }
 
-    // ── DeleteAsync ────────────────────────────────────────────────────────
-
     [Test]
     public async Task DeleteAsync_ExistingId_ReturnsTrueAndRemovesGroup()
     {

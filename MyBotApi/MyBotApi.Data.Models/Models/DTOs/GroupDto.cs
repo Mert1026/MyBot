@@ -10,6 +10,7 @@ namespace MyBotApi.Data.Models.Models.DTOs
     public class GroupDto
     {
         public string Name { get; set; }
+        public string ImageLink { get; set; }
         public string Description { get; set; }
         public string StartAsHour { get; set; }
         public string EndAsHour { get; set; }

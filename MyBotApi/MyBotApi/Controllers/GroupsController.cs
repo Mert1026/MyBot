@@ -135,7 +135,8 @@ namespace MyBotApi.Controllers
                     CreatedAt = DateTime.UtcNow,
                     StartAsHour = groupCreateDto.StartAsHour,
                     EndAsHour = groupCreateDto.EndAsHour,
-                    UserId = Guid.Parse(groupCreateDto.UserId) // Assuming UserName is actually a string representation of the UserId
+                    UserId = Guid.Parse(groupCreateDto.UserId),
+                    ImageLink = groupCreateDto.ImageLink// Assuming UserName is actually a string representation of the UserId
                 };
                 await _groupRepository.CreateAsync(group);
                 return Ok(new ApiResponse<Group>
@@ -185,6 +186,10 @@ namespace MyBotApi.Controllers
                 }
                 existingGroup.Name = groupDto.Name;
                 existingGroup.Description = groupDto.Description;
+                existingGroup.StartAsHour = groupDto.StartAsHour;
+                existingGroup.EndAsHour = groupDto.EndAsHour;
+                existingGroup.UserId = Guid.Parse(groupDto.UserId);
+                existingGroup.ImageLink = groupDto.ImageLink;
                 await _groupRepository.UpdateAsync(existingGroup);
                 Group toShow = new Group()
                 {
@@ -196,7 +201,8 @@ namespace MyBotApi.Controllers
                     EndAsHour = existingGroup.EndAsHour,
                     UserId = existingGroup.UserId,
                     IsDeleted = existingGroup.IsDeleted,
-                    Members = null
+                    Members = null,
+                    ImageLink = existingGroup.ImageLink,
                 };
                 return Ok(new ApiResponse<Group>
                 {
