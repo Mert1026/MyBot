@@ -67,8 +67,7 @@ namespace MyBotApi.Data.Repositories
             if (group == null)
                 return false;
 
-            await _context.Groups.Where(g => g.Id == id)
-                .ExecuteUpdateAsync(s => s.SetProperty(g => g.IsDeleted, true));
+            group.IsDeleted = true;
             await _context.SaveChangesAsync();
             return true;
         }

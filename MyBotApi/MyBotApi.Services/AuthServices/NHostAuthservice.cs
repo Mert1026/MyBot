@@ -30,6 +30,19 @@ namespace MyBotApi.Services.AuthServices
             _logger = logger;
         }
 
+        public NhostAuthService(
+            IConfiguration configuration,
+            IUserRepository userRepository,
+            ILogger<NhostAuthService> logger,
+            HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+            _nhostAuthUrl = configuration["NHost:AuthUrl"] ??
+                "https://jrpixlslkjplvkxzqsmb.auth.eu-central-1.nhost.run/v1";
+            _userRepository = userRepository;
+            _logger = logger;
+        }
+
         public async Task<AuthResponse> SignUpAsync(SignUpRequest request)
         {
             try

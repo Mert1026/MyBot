@@ -3,5 +3,6 @@
   <Project Path="MyBotApi.Data/MyBotApi.Data.csproj" />
   <Project Path="MyBotApi.GCommon/MyBotApi.GCommon.csproj" Id="9807bda8-e93e-4c0e-89c8-a2e99d907721" />
   <Project Path="MyBotApi.Services/MyBotApi.Services.csproj" />
+  <Project Path="MyBotApi.Tests/MyBotApi.Tests.csproj" Id="037932e7-c38d-499f-9988-a43e28328848" />
   <Project Path="MyBotApi/MyBotApi.csproj" />
 </Solution>
