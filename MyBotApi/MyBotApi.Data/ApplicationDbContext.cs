@@ -19,6 +19,8 @@ namespace MyBotApi.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<ApplicationForm> ApplicationForms { get; set; }
+        public DbSet<Parent> Parents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,18 +38,30 @@ namespace MyBotApi.Data
                 entity.Property(e => e.NhostUserId);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+                entity.Property(e => e.Description).HasMaxLength(DescriptionMaxLength);
+                entity.Property(e => e.EmailVerified).HasDefaultValue(true);//testovo
             });
 
             modelBuilder.Entity<Member>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.FirstName).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.LastName).IsRequired().HasMaxLength(NameMaxLength);
                 entity.Property(e => e.JoinTime).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.Description).HasMaxLength(DescriptionMaxLength);
                 entity.Property(e => e.Status).HasDefaultValue(true);
+                entity.Property(e => e.Age).IsRequired();
                 entity.HasOne(e => e.Group)
                     .WithMany(g => g.Members)
                     .HasForeignKey(e => e.GroupId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Parent)
+                    .WithMany(p => p.Kids)
+                    .HasForeignKey(e => e.ParentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.ApplicationForm)
+                    .WithMany(a => a.Kids)
+                    .HasForeignKey(e => e.ApplicationFormId)
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
@@ -62,6 +76,11 @@ namespace MyBotApi.Data
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.StartAsHour).IsRequired().HasMaxLength(HourMaxLength);
                 entity.Property(e => e.EndAsHour).IsRequired().HasMaxLength(HourMaxLength);
+                entity.Property(e => e.MembersCount).HasDefaultValue(0);
+                entity.Property(e => e.MaxMembers).IsRequired();
+                entity.Property(e => e.MinAge).IsRequired();
+                entity.Property(e => e.MaxAge).IsRequired();
+                entity.Property(e => e.Location).IsRequired();
                 entity.HasOne(e => e.User)
                     .WithMany(u => u.Groups)
                     .HasForeignKey(e => e.UserId)
@@ -82,6 +101,28 @@ namespace MyBotApi.Data
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-        }
-    }
+
+            modelBuilder.Entity<ApplicationForm>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ParentFirstName).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.ParentLastName).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+                entity.Property(e => e.PhoneNumber).IsRequired();
+                entity.Property(e => e.Location).IsRequired();
+
+            });
+
+            modelBuilder.Entity<Parent>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FirstName).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.LastName).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(NameMaxLength);
+                entity.Property(e => e.PhoneNumber).IsRequired();
+                entity.Property(e => e.GivenPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+                entity.Property(e => e.PayedUntil).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+            });
+    }   }
 }

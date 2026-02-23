@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyBotApi.Data.Models;
+using MyBotApi.Data.Models.Enums;
 using MyBotApi.Data.Models.Models;
 using MyBotApi.Data.Models.Models.DTOs;
 using MyBotApi.Data.Models.Models.NHostModels;
@@ -64,17 +65,17 @@ namespace MyBotApi.Services.AuthServices
                         // Store role in metadata
                         metadata = new
                         {
-                            role = request.Role
+                            role = UserRole.Teacher.ToString().ToLower() // Store role as lowercase string
                         },
                         // CRITICAL: Set default role and allowed roles for Hasura
                         // Without these, the role won't be in the JWT token!
-                        defaultRole = request.Role,
-                        allowedRoles = new[] { request.Role }
+                        defaultRole = UserRole.Teacher.ToString().ToLower(),
+                        allowedRoles = new[] { UserRole.Teacher.ToString().ToLower() }
                     }
                 };
 
                 _logger.LogInformation("Signing up user {Email} with role: {Role}",
-                    request.Email, request.Role);
+                    request.Email, UserRole.Teacher.ToString().ToLower());
 
                 var response = await _httpClient.PostAsJsonAsync(
                     $"{_nhostAuthUrl}/signup/email-password",
@@ -98,7 +99,7 @@ namespace MyBotApi.Services.AuthServices
                 {
                     Email = request.Email,
                     DisplayName = request.DisplayName,
-                    Role = request.Role,
+                    Role = UserRole.Teacher.ToString().ToLower(),
                     NhostUserId = nhostResponse?.Session?.User?.Id,
                     EmailVerified = nhostResponse?.Session?.User?.EmailVerified ?? false,
                     CreatedAt = DateTime.UtcNow,
@@ -107,7 +108,7 @@ namespace MyBotApi.Services.AuthServices
 
                 await _userRepository.CreateAsync(user);
                 _logger.LogInformation("User created in database: {Email} with role: {Role}",
-                    request.Email, request.Role);
+                    request.Email, UserRole.Teacher.ToString().ToLower());
 
                 return new AuthResponse
                 {

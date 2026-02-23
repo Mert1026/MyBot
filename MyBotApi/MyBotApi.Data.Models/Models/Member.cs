@@ -12,7 +12,9 @@ namespace MyBotApi.Data.Models.Models
     public class Member
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public int Age { get; set; }
         public string Description { get; set; }
 
         [Column(TypeName = "timestamptz")]
@@ -20,6 +22,10 @@ namespace MyBotApi.Data.Models.Models
         public bool Status { get; set; }
         public Group Group { get; set; }
         public Guid GroupId { get; set; }
+        public Parent Parent { get; set; }
+        public Guid ParentId { get; set; }
+        public ApplicationForm ApplicationForm { get; set; }
+        public Guid ApplicationFormId { get; set; }
         public bool IsDeleted { get; set; }
 
     }

@@ -20,12 +20,6 @@ public class AuthServiceTests
     private Mock<IConfiguration> _configMock;
 
     // ── Fake HTTP handler ──────────────────────────────────────────────────
-
-    /// <summary>
-    /// Replaces the real HTTP stack so NhostAuthService never hits the network.
-    /// Configure <see cref="ResponseFactory"/> before each test to control
-    /// what the fake "Nhost server" returns.
-    /// </summary>
     private class FakeHttpMessageHandler : HttpMessageHandler
     {
         public Func<HttpRequestMessage, HttpResponseMessage> ResponseFactory { get; set; }
@@ -123,8 +117,7 @@ public class AuthServiceTests
         {
             Email = "a@t.com",
             Password = "pass",
-            DisplayName = "Alice",
-            Role = "admin"
+            DisplayName = "Alice"
         };
 
         var result = await svc.SignUpAsync(request);
@@ -146,8 +139,7 @@ public class AuthServiceTests
         {
             Email = "b@t.com",
             Password = "p",
-            DisplayName = "Bob",
-            Role = "teacher"
+            DisplayName = "Bob"
         });
 
         Assert.That(result.User.Email, Is.EqualTo("b@t.com"));
@@ -165,8 +157,7 @@ public class AuthServiceTests
             {
                 Email = "a@t.com",
                 Password = "p",
-                DisplayName = "A",
-                Role = "admin"
+                DisplayName = "A"
             }));
 
         Assert.That(ex!.Message, Does.Contain("already exists"));
@@ -184,8 +175,7 @@ public class AuthServiceTests
             {
                 Email = "a@t.com",
                 Password = "p",
-                DisplayName = "A",
-                Role = "admin"
+                DisplayName = "A"
             }));
     }
 
@@ -201,8 +191,7 @@ public class AuthServiceTests
             {
                 Email = "a@t.com",
                 Password = "p",
-                DisplayName = "A",
-                Role = "admin"
+                DisplayName = "A"
             }));
 
         _userRepoMock.Verify(r => r.CreateAsync(It.IsAny<User>()), Times.Never);

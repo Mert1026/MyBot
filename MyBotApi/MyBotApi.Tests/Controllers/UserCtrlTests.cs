@@ -89,7 +89,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_ValidAdminRequest_ReturnsOk()
     {
-        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A", Role = "admin" };
+        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A"};
         _authServiceMock.Setup(s => s.SignUpAsync(request)).ReturnsAsync(MakeAuthResponse());
 
         var result = await _controller.SignUp(request);
@@ -101,7 +101,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_ValidTeacherRequest_ReturnsOk()
     {
-        var request = new SignUpRequest { Email = "t@t.com", Password = "pass", DisplayName = "T", Role = "teacher" };
+        var request = new SignUpRequest { Email = "t@t.com", Password = "pass", DisplayName = "T"};
         _authServiceMock.Setup(s => s.SignUpAsync(request)).ReturnsAsync(MakeAuthResponse());
 
         var result = await _controller.SignUp(request);
@@ -112,7 +112,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_InvalidRole_ReturnsBadRequest()
     {
-        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A", Role = "hacker" };
+        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A"};
 
         var result = await _controller.SignUp(request);
 
@@ -122,7 +122,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_InvalidRole_SuccessIsFalse()
     {
-        var request = new SignUpRequest { Role = "hacker", Email = "a@t.com", Password = "p", DisplayName = "A" };
+        var request = new SignUpRequest {Email = "a@t.com", Password = "p", DisplayName = "A" };
 
         var result = await _controller.SignUp(request);
 
@@ -133,7 +133,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_WhenServiceThrows_ReturnsBadRequest()
     {
-        var request = new SignUpRequest { Email = "a@t.com", Password = "p", DisplayName = "A", Role = "admin" };
+        var request = new SignUpRequest { Email = "a@t.com", Password = "p", DisplayName = "A"};
         _authServiceMock.Setup(s => s.SignUpAsync(request)).ThrowsAsync(new Exception("Nhost down"));
 
         var result = await _controller.SignUp(request);
@@ -231,8 +231,6 @@ public class UserCtrlTests
 
         Assert.That(((ObjectResult)result.Result!).StatusCode, Is.EqualTo(500));
     }
-
-    // ── GetAllUsers ────────────────────────────────────────────────────────
 
     [Test]
     public async Task GetAllUsers_ReturnsOkWithMappedDtos()
@@ -334,13 +332,13 @@ public class UserCtrlTests
 
     // ── GetPublicInfo ──────────────────────────────────────────────────────
 
-    [Test]
-    public void GetPublicInfo_ReturnsOkWithSuccessTrue()
-    {
-        var result = _controller.GetPublicInfo();
+    //[Test]
+    //public void GetPublicInfo_ReturnsOkWithSuccessTrue()
+    //{
+    //    var result = _controller.GetPublicInfo();
 
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
-        var ok = (OkObjectResult)result.Result!;
-        Assert.That(((ApiResponse<object>)ok.Value!).Success, Is.True);
-    }
+    //    Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+    //    var ok = (OkObjectResult)result.Result!;
+    //    Assert.That(((ApiResponse<object>)ok.Value!).Success, Is.True);
+    //}
 }

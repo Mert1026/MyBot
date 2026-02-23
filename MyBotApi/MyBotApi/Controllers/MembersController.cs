@@ -92,7 +92,10 @@ namespace MyBotApi.Controllers
             {
                 var member = new Member
                 {
-                    Name = memberDto.Name,
+                    FirstName = memberDto.FirstName,
+                    LastName = memberDto.LastName,
+                    Age = memberDto.Age,
+                    ParentId = Guid.Parse(memberDto.ParentId),
                     Description = memberDto.Description,
                     JoinTime = DateTimeOffset.UtcNow,
                     GroupId = Guid.Parse(memberDto.GroupId)
@@ -125,8 +128,10 @@ namespace MyBotApi.Controllers
             {
                 bool groupIdCheck = Guid.TryParse(memberDto.GroupId, out var result);
                 bool userIdCheck = Guid.TryParse(memberid, out var userIdResult);
+                bool parentIdCheck = Guid.TryParse(memberDto.ParentId, out var parentIdResult);
                 if (!userIdCheck
-                    || !groupIdCheck)
+                    || !groupIdCheck
+                    || !parentIdCheck)
                 {
                     return NotFound(new ApiResponse<Member>
                     {
@@ -152,19 +157,34 @@ namespace MyBotApi.Controllers
                         Message = "Group is not found"
                     });
                 }
-                existingMember.Name = memberDto.Name;
+                //var existingParent = await _memberRepository.GetByIdAsync(Guid.Parse(memberDto.ParentId));
+                //if (existingParent == null)
+                //{
+                //    return NotFound(new ApiResponse<Member>
+                //    {
+                //        Success = false,
+                //        Message = "Parent is not found"
+                //    });
+                //}
+                existingMember.FirstName = memberDto.FirstName;
+                existingMember.LastName = memberDto.LastName;
+                existingMember.Age = memberDto.Age;
                 existingMember.Description = memberDto.Description;
                 existingMember.GroupId = Guid.Parse(memberDto.GroupId);
                 await _memberRepository.UpdateAsync(existingMember);
                 Member toShow = new Member
                 {
                     Id = existingMember.Id,
-                    Name = existingMember.Name,
+                    FirstName = existingMember.FirstName,
+                    LastName = existingMember.LastName,
+                    Age = existingMember.Age,
                     Description = existingMember.Description,
                     JoinTime = existingMember.JoinTime,
                     Status = existingMember.Status,
                     GroupId = existingMember.GroupId,
-                    Group = null
+                    Group = existingGroup,
+                    ParentId = existingMember.ParentId,
+                    Parent = existingMember.Parent,
                 };
                 return Ok(new ApiResponse<Member>
                 {

@@ -136,7 +136,14 @@ namespace MyBotApi.Controllers
                     StartAsHour = groupCreateDto.StartAsHour,
                     EndAsHour = groupCreateDto.EndAsHour,
                     UserId = Guid.Parse(groupCreateDto.UserId),
-                    ImageLink = groupCreateDto.ImageLink// Assuming UserName is actually a string representation of the UserId
+                    ImageLink = groupCreateDto.ImageLink,
+                    MembersCount = groupCreateDto.MembersCount,
+                    MaxMembers = groupCreateDto.MaxMembers,
+                    MaxAge = groupCreateDto.MaxAge,
+                    MinAge = groupCreateDto.MinAge,
+                    Location = groupCreateDto.Location,
+                    Members = new List<Member>(),
+                    // Assuming UserName is actually a string representation of the UserId
                 };
                 await _groupRepository.CreateAsync(group);
                 return Ok(new ApiResponse<Group>
@@ -185,6 +192,10 @@ namespace MyBotApi.Controllers
                     });
                 }
                 existingGroup.Name = groupDto.Name;
+                existingGroup.MaxMembers = groupDto.MaxMembers;
+                existingGroup.MinAge = groupDto.MinAge;
+                existingGroup.MaxAge = groupDto.MaxAge;
+                existingGroup.Location = groupDto.Location;
                 existingGroup.Description = groupDto.Description;
                 existingGroup.StartAsHour = groupDto.StartAsHour;
                 existingGroup.EndAsHour = groupDto.EndAsHour;
@@ -203,6 +214,10 @@ namespace MyBotApi.Controllers
                     IsDeleted = existingGroup.IsDeleted,
                     Members = null,
                     ImageLink = existingGroup.ImageLink,
+                    MinAge = existingGroup.MinAge,
+                    MaxMembers = existingGroup.MaxMembers,
+                    MaxAge = existingGroup.MaxAge,
+                    Location = existingGroup.Location,
                 };
                 return Ok(new ApiResponse<Group>
                 {

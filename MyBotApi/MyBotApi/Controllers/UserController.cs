@@ -31,14 +31,14 @@ namespace MyBotApi.Controllers
         {
             try
             {
-                if (request.Role != "admin" && request.Role != "teacher")
-                {
-                    return BadRequest(new ApiResponse<AuthResponse>
-                    {
-                        Success = false,
-                        Message = "Invalid role. Must be 'admin' or 'teacher'."
-                    });
-                }
+                //if (request.Role != "admin" && request.Role != "teacher")
+                //{
+                //    return BadRequest(new ApiResponse<AuthResponse>
+                //    {
+                //        Success = false,
+                //        Message = "Invalid role. Must be 'admin' or 'teacher'."
+                //    });
+                //}
 
                 var result = await _authService.SignUpAsync(request);
 

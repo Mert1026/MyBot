@@ -14,6 +14,11 @@ namespace MyBotApi.Data.Models.Models.DTOs
         public string Description { get; set; }
         public string StartAsHour { get; set; }
         public string EndAsHour { get; set; }
+        public int MinAge { get; set; }
+        public int MaxAge { get; set; }
+        public string Location { get; set; }
+        public int MembersCount { get; set; }
+        public int MaxMembers { get; set; }
         public string UserId { get; set; }
     }
 }
