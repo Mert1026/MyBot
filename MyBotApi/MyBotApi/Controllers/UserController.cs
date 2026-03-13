@@ -81,7 +81,7 @@ namespace MyBotApi.Controllers
                 return Unauthorized(new ApiResponse<AuthResponse>
                 {
                     Success = false,
-                    Message = ex.Message
+                    Message =  ex.InnerException?.Message ?? ex.Message
                 });
             }
         }
@@ -134,7 +134,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<UserDto>
                 {
                     Success = false,
-                    Message = "An error occurred while retrieving profile"
+                    Message = $"An error occurred while retrieving profile - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -170,7 +170,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<IEnumerable<UserDto>>
                 {
                     Success = false,
-                    Message = "An error occurred while retrieving users"
+                    Message = $"An error occurred while retrieving users - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -215,7 +215,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<IEnumerable<UserDto>>
                 {
                     Success = false,
-                    Message = "An error occurred while retrieving users"
+                    Message = $"An error occurred while retrieving users - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -249,7 +249,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<object>
                 {
                     Success = false,
-                    Message = "An error occurred while deleting user"
+                    Message = $"An error occurred while deleting user - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }

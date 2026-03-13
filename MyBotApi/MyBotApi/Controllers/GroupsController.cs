@@ -50,7 +50,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<IEnumerable<Group>>
                 {
                     Success = false,
-                    Message = "An error occurred while retrieving groups"
+                    Message = $"An error occurred while retrieving groups - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -82,7 +82,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<Group>
                 {
                     Success = false,
-                    Message = "An error occurred while retrieving the group"
+                    Message = $"An error occurred while retrieving the group - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
 
@@ -115,7 +115,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<Group>
                 {
                     Success = false,
-                    Message = "An error occurred while retrieving the group"
+                    Message = $"An error occurred while retrieving the group - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
 
@@ -137,7 +137,6 @@ namespace MyBotApi.Controllers
                     EndAsHour = groupCreateDto.EndAsHour,
                     UserId = Guid.Parse(groupCreateDto.UserId),
                     ImageLink = groupCreateDto.ImageLink,
-                    MembersCount = groupCreateDto.MembersCount,
                     MaxMembers = groupCreateDto.MaxMembers,
                     MaxAge = groupCreateDto.MaxAge,
                     MinAge = groupCreateDto.MinAge,
@@ -159,7 +158,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<Group>
                 {
                     Success = false,
-                    Message = $"An error occurred while creating the group. {ex.Message}"
+                    Message = $"An error occurred while creating the group - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -232,7 +231,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<Group>
                 {
                     Success = false,
-                    Message = "An error occurred while updating the group"
+                    Message = $"An error occurred while updating the group - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -274,7 +273,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<bool>
                 {
                     Success = false,
-                    Message = "An error occurred while deleting the group"
+                    Message = $"An error occurred while deleting the group - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }
@@ -317,7 +316,7 @@ namespace MyBotApi.Controllers
                 return StatusCode(500, new ApiResponse<bool>
                 {
                     Success = false,
-                    Message = "An error occurred while deleting the group"
+                    Message = $"An error occurred while deleting the group - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }

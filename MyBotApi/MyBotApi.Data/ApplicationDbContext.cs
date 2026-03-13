@@ -21,6 +21,7 @@ namespace MyBotApi.Data
         public DbSet<Member> Members { get; set; }
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
         public DbSet<Parent> Parents { get; set; }
+        public DbSet<SMSModel> SMSHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +40,8 @@ namespace MyBotApi.Data
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.Description).HasMaxLength(DescriptionMaxLength);
+                entity.Property(e => e.ImageLink).HasDefaultValue("https://cdn-icons-png.flaticon.com/512/847/847969.png");
+                entity.Property(e => e.Description).HasDefaultValue("No description!");
                 entity.Property(e => e.EmailVerified).HasDefaultValue(true);//testovo
             });
 
@@ -51,17 +54,9 @@ namespace MyBotApi.Data
                 entity.Property(e => e.Description).HasMaxLength(DescriptionMaxLength);
                 entity.Property(e => e.Status).HasDefaultValue(true);
                 entity.Property(e => e.Age).IsRequired();
-                entity.HasOne(e => e.Group)
-                    .WithMany(g => g.Members)
-                    .HasForeignKey(e => e.GroupId)
-                    .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(e => e.Parent)
                     .WithMany(p => p.Kids)
                     .HasForeignKey(e => e.ParentId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                entity.HasOne(e => e.ApplicationForm)
-                    .WithMany(a => a.Kids)
-                    .HasForeignKey(e => e.ApplicationFormId)
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
@@ -76,7 +71,6 @@ namespace MyBotApi.Data
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.StartAsHour).IsRequired().HasMaxLength(HourMaxLength);
                 entity.Property(e => e.EndAsHour).IsRequired().HasMaxLength(HourMaxLength);
-                entity.Property(e => e.MembersCount).HasDefaultValue(0);
                 entity.Property(e => e.MaxMembers).IsRequired();
                 entity.Property(e => e.MinAge).IsRequired();
                 entity.Property(e => e.MaxAge).IsRequired();
@@ -110,6 +104,7 @@ namespace MyBotApi.Data
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.PhoneNumber).IsRequired();
                 entity.Property(e => e.Location).IsRequired();
+                entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             });
 
@@ -121,8 +116,18 @@ namespace MyBotApi.Data
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(NameMaxLength);
                 entity.Property(e => e.PhoneNumber).IsRequired();
                 entity.Property(e => e.GivenPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.IsDeleted).HasDefaultValue(false);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.PayedUntil).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+            });
+
+            modelBuilder.Entity<SMSModel>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.SentAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+                entity.Property(e => e.Message).HasMaxLength(DescriptionMaxLength);//TODO
+                entity.Property(e => e.PhoneNumber).IsRequired();
+                entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             });
     }   }
 }

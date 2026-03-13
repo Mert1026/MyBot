@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyBotApi.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyBotApi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260313080633_UpdatedModelsData")]
+    partial class UpdatedModelsData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,11 +39,6 @@ namespace MyBotApi.Data.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -105,6 +103,11 @@ namespace MyBotApi.Data.Migrations
                     b.Property<int>("MaxMembers")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MembersCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
                     b.Property<int>("MinAge")
                         .HasColumnType("integer");
 
@@ -140,7 +143,7 @@ namespace MyBotApi.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ApplicationFormId")
+                    b.Property<Guid>("ApplicationFormId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("BornDate")
@@ -156,7 +159,7 @@ namespace MyBotApi.Data.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
-                    b.Property<Guid?>("GroupId")
+                    b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsDeleted")
@@ -202,8 +205,8 @@ namespace MyBotApi.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ApplicationFormId")
-                        .HasColumnType("uuid");
+                    b.Property<DateTimeOffset>("BornDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ChildrenCount")
                         .HasColumnType("integer");
@@ -285,42 +288,6 @@ namespace MyBotApi.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("MyBotApi.Data.Models.Models.SMSModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<Guid?>("MemberId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("SentAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SMSHistory");
-                });
-
             modelBuilder.Entity("MyBotApi.Data.Models.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -334,10 +301,8 @@ namespace MyBotApi.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasDefaultValue("No description!");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("DisplayName")
                         .HasMaxLength(80)
@@ -355,9 +320,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.Property<string>("ImageLink")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasDefaultValue("https://cdn-icons-png.flaticon.com/512/847/847969.png");
+                        .HasColumnType("text");
 
                     b.Property<string>("NhostUserId")
                         .HasColumnType("text");
@@ -396,19 +359,27 @@ namespace MyBotApi.Data.Migrations
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.Member", b =>
                 {
-                    b.HasOne("MyBotApi.Data.Models.Models.ApplicationForm", null)
+                    b.HasOne("MyBotApi.Data.Models.Models.ApplicationForm", "ApplicationForm")
                         .WithMany("Kids")
-                        .HasForeignKey("ApplicationFormId");
+                        .HasForeignKey("ApplicationFormId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("MyBotApi.Data.Models.Models.Group", null)
+                    b.HasOne("MyBotApi.Data.Models.Models.Group", "Group")
                         .WithMany("Members")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyBotApi.Data.Models.Models.Parent", "Parent")
                         .WithMany("Kids")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationForm");
+
+                    b.Navigation("Group");
 
                     b.Navigation("Parent");
                 });

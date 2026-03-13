@@ -19,13 +19,11 @@ namespace MyBotApi.Data.Models.Models
 
         [Column(TypeName = "timestamptz")]
         public DateTimeOffset JoinTime { get; set; }
+        public DateTimeOffset BornDate { get; set; }
         public bool Status { get; set; }
-        public Group Group { get; set; }
-        public Guid GroupId { get; set; }
         public Parent Parent { get; set; }
         public Guid ParentId { get; set; }
-        public ApplicationForm ApplicationForm { get; set; }
-        public Guid ApplicationFormId { get; set; }
+        public Guid? ApplicationFormId { get; set; }
         public bool IsDeleted { get; set; }
 
     }

@@ -13,10 +13,14 @@ namespace MyBotApi.Data.Models.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public int Age { get; set; }
         public int ChildrenCount { get; set; }
         public double GivenPrice { get; set; }
+        public bool IsDeleted { get; set; }
+        public Guid? ApplicationFormId { get; set; }
         public ICollection<Member> Kids { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset PayedUntil { get; set; }
+        public DateTimeOffset JoinTime { get; set; }
     }
 }
