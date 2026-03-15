@@ -4,12 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import api from '../utils/api';
 import './Home.css';
 import logo from '../assets/logo.png';
 import photo1 from '../assets/photo_1.jpg';
 import photo2 from '../assets/photo_2.jpg';
 import photo3 from '../assets/photo_3.jpg';
 import photo4 from '../assets/photo_4.jpg';
+import photo5 from '../assets/photo_5.jpg';
+
+const courseImages = [photo2, photo3, photo4, photo5, photo1];
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -17,6 +21,7 @@ const Home = () => {
   const { user } = useContext(AuthContext);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [groups, setGroups] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +31,20 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const res = await api.get('/Groups/all');
+        if (res.data.success) {
+          setGroups(res.data.data?.filter(g => !g.isDeleted) || []);
+        }
+      } catch (err) {
+        console.error('Failed to load groups for home page');
+      }
+    };
+    fetchGroups();
+  }, []);
+
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
@@ -33,9 +52,10 @@ const Home = () => {
   const navLinks = [
     { name: t('nav.about'), href: '#about' },
     { name: t('nav.trainings'), href: '#trainings' },
-    { name: t('nav.events'), href: '#events' },
     { name: t('nav.locationsContacts'), href: '#locations' }
   ];
+
+  const displayedGroups = groups.slice(0, 3);
 
   return (
     <div className="home-wrapper">
@@ -168,7 +188,7 @@ const Home = () => {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
             >
-               <img src={logo} alt="MyBot Mascot" style={{ height: '60px', marginBottom: '1rem', filter: 'drop-shadow(0 0 10px rgba(184, 230, 0, 0.3))' }} />
+               <img src={logo} alt="MyBot Mascot" style={{ height: '60px', marginBottom: '1rem', filter: 'drop-shadow(0 0 10px rgba(33, 150, 243, 0.3))' }} />
                <h2 className="section-title" dangerouslySetInnerHTML={{ __html: t('about.title') }}></h2>
             </motion.div>
 
@@ -224,7 +244,7 @@ const Home = () => {
          </div>
       </section>
 
-      {/* Trainings Section */}
+      {/* Trainings Section - Shows last 3 groups from DB */}
       <section id="trainings" className="trainings-section">
          <div className="trainings-container">
             <motion.div 
@@ -237,91 +257,65 @@ const Home = () => {
             </motion.div>
 
             <div className="courses-grid">
-               <motion.div className="course-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                  <div className="course-image">
-                     <img src={photo2} alt="Course 1" />
-                  </div>
-                  <div className="course-content">
-                     <h3>{t('trainings.course1')}</h3>
-                     <p>{t('trainings.course1Desc')}</p>
-                  </div>
-               </motion.div>
-
-               <motion.div className="course-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-                  <div className="course-image">
-                     <img src={photo3} alt="Course 2" />
-                  </div>
-                  <div className="course-content">
-                     <h3>{t('trainings.course2')}</h3>
-                     <p>{t('trainings.course2Desc')}</p>
-                  </div>
-               </motion.div>
-
-               <motion.div className="course-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
-                  <div className="course-image">
-                     <img src={photo4} alt="Course 3" />
-                  </div>
-                  <div className="course-content">
-                     <h3>{t('trainings.course3')}</h3>
-                     <p>{t('trainings.course3Desc')}</p>
-                  </div>
-               </motion.div>
+               {displayedGroups.length > 0 ? (
+                 displayedGroups.map((group, idx) => (
+                   <motion.div 
+                     className="course-card" 
+                     key={group.id}
+                     initial={{ opacity: 0, y: 30 }} 
+                     whileInView={{ opacity: 1, y: 0 }} 
+                     viewport={{ once: true }}
+                     transition={{ delay: idx * 0.1 }}
+                   >
+                     <div className="course-image">
+                        <img src={group.imageLink || courseImages[idx % courseImages.length]} alt={group.name} />
+                     </div>
+                     <div className="course-content">
+                        <h3>{group.name}</h3>
+                        <p>{group.description || t('common.noData')}</p>
+                        <p style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#64748b' }}>
+                          📅 {group.dayOfWeek || 'N/A'} · ⏰ {group.startAsHour || '?'} - {group.endAsHour || '?'} · 📍 {group.location || 'N/A'}
+                        </p>
+                        <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.25rem' }}>
+                          👶 {group.minAge}-{group.maxAge} {t('common.age') || 'yrs'} · 👥 Max {group.maxMembers}
+                        </p>
+                     </div>
+                   </motion.div>
+                 ))
+               ) : (
+                 <>
+                   <motion.div className="course-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                     <div className="course-image"><img src={photo2} alt="Course 1" /></div>
+                     <div className="course-content">
+                        <h3>{t('trainings.course1')}</h3>
+                        <p>{t('trainings.course1Desc')}</p>
+                     </div>
+                   </motion.div>
+                   <motion.div className="course-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+                     <div className="course-image"><img src={photo3} alt="Course 2" /></div>
+                     <div className="course-content">
+                        <h3>{t('trainings.course2')}</h3>
+                        <p>{t('trainings.course2Desc')}</p>
+                     </div>
+                   </motion.div>
+                   <motion.div className="course-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
+                     <div className="course-image"><img src={photo4} alt="Course 3" /></div>
+                     <div className="course-content">
+                        <h3>{t('trainings.course3')}</h3>
+                        <p>{t('trainings.course3Desc')}</p>
+                     </div>
+                   </motion.div>
+                 </>
+               )}
             </div>
-         </div>
-      </section>
-      
-      {/* Events Section */}
-      <section id="events" className="events-section">
-         <div className="events-container">
-            <motion.div 
-               className="section-header"
-               initial={{ opacity: 0, y: 30 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-            >
-               <h2 className="section-title" dangerouslySetInnerHTML={{ __html: t('events.title') }}></h2>
-            </motion.div>
 
-            <div className="events-list">
-               <motion.div className="event-item" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                  <div className="event-date">
-                     <span className="month">MAY</span>
-                     <span className="day">15</span>
-                  </div>
-                  <div className="event-details">
-                     <h3>{t('events.event1')}</h3>
-                  </div>
-               </motion.div>
-
-               <motion.div className="event-item" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-                  <div className="event-date">
-                     <span className="month">JUN</span>
-                     <span className="day">02</span>
-                  </div>
-                  <div className="event-details">
-                     <h3>{t('events.event2')}</h3>
-                  </div>
-               </motion.div>
-
-               <motion.div className="event-item" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
-                  <div className="event-date">
-                     <span className="month">JUL</span>
-                     <span className="day">20</span>
-                  </div>
-                  <div className="event-details">
-                     <h3>{t('events.event3')}</h3>
-                  </div>
-               </motion.div>
-            </div>
-            
-            <motion.div 
-               initial={{ opacity: 0, scale: 0.5 }} 
-               whileInView={{ opacity: 1, scale: 1 }} 
-               viewport={{ once: true }}
-               style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}
-            >
-               <img src={logo} alt="Robot Mascot" style={{ height: '100px', opacity: 0.8, filter: 'drop-shadow(0 0 20px rgba(184, 230, 0, 0.4))' }} />
-            </motion.div>
+            {groups.length > 3 && (
+              <div style={{ textAlign: 'center' }}>
+                <button className="show-more-btn" onClick={() => navigate('/courses')}>
+                  {t('trainings.showMore') || 'Show More'}
+                </button>
+              </div>
+            )}
          </div>
       </section>
 
@@ -339,27 +333,27 @@ const Home = () => {
 
             <div className="contact-grid">
                <motion.div className="location-card" initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-                  <h3>{t('locations.sofia')}</h3>
-                  <p>{t('locations.sofiaAddr')}</p>
+                  <h3>{t('locations.gabrovo')}</h3>
+                  <p>{t('locations.gabrovoAddr')}</p>
                   <div className="contact-phone">
-                     <a href="tel:+359898424031">+359 89 842 4031</a>
-                     <a href="tel:+359888991931">+359 88 899 1931</a>
+                     <a href="tel:+359898424031">+359 898 424 031</a>
+                     <a href="tel:+359888991931">+359 888 991 931</a>
                   </div>
                </motion.div>
                <motion.div className="location-card" initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-                  <h3>{t('locations.plovdiv')}</h3>
-                  <p>{t('locations.plovdivAddr')}</p>
+                  <h3>{t('locations.vt')}</h3>
+                  <p>{t('locations.vtAddr')}</p>
                   <div className="contact-phone">
-                     <a href="tel:+359898424031">+359 89 842 4031</a>
-                     <a href="tel:+359888991931">+359 88 899 1931</a>
+                     <a href="tel:+359898424031">+359 898 424 031</a>
+                     <a href="tel:+359888991931">+359 888 991 931</a>
                   </div>
                </motion.div>
                <motion.div className="location-card" initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
                   <h3>{t('locations.varna')}</h3>
                   <p>{t('locations.varnaAddr')}</p>
                   <div className="contact-phone">
-                     <a href="tel:+359898424031">+359 89 842 4031</a>
-                     <a href="tel:+359888991931">+359 88 899 1931</a>
+                     <a href="tel:+359898424031">+359 898 424 031</a>
+                     <a href="tel:+359888991931">+359 888 991 931</a>
                   </div>
                </motion.div>
             </div>

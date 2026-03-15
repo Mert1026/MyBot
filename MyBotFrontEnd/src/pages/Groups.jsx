@@ -63,8 +63,8 @@ const Groups = () => {
 
   const openModal = (group = null) => {
     setCurrentGroup(group ? { ...group } : {
-        name: '', description: '', startAsHour: '', endAsHour: '', 
-        userId: '', imageLink: '', maxMembers: 0, minAge: 0, maxAge: 0, location: '', dayOfWeek: 1
+        name: '', description: '', startAsHour: '10:00', endAsHour: '12:00', 
+        userId: '', imageLink: '', maxMembers: 0, minAge: 0, maxAge: 0, location: '', dayOfWeek: 'Monday'
     });
     setIsModalOpen(true);
   };
@@ -117,9 +117,8 @@ const Groups = () => {
     }
   };
 
-  const getDayName = (dayNumber) => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[dayNumber] || 'Unknown';
+  const getDayName = (dayStr) => {
+    return dayStr || 'N/A';
   };
 
   return (
@@ -274,24 +273,24 @@ const Groups = () => {
               </div>
               <div className="grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
                  <div className="form-group">
-                    <label className="form-label">Day of Week</label>
+                     <label className="form-label">Day of Week</label>
                     <select name="dayOfWeek" className="form-select" value={currentGroup.dayOfWeek} onChange={handleChange}>
-                        <option value={1}>Monday</option>
-                        <option value={2}>Tuesday</option>
-                        <option value={3}>Wednesday</option>
-                        <option value={4}>Thursday</option>
-                        <option value={5}>Friday</option>
-                        <option value={6}>Saturday</option>
-                        <option value={0}>Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
                     </select>
                  </div>
                  <div className="form-group">
                     <label className="form-label">Start Time</label>
-                    <input type="text" name="startAsHour" className="form-input" value={currentGroup.startAsHour} onChange={handleChange} placeholder="08:00" />
+                    <input type="time" name="startAsHour" className="form-input" value={currentGroup.startAsHour} onChange={handleChange} />
                  </div>
                  <div className="form-group">
                     <label className="form-label">End Time</label>
-                    <input type="text" name="endAsHour" className="form-input" value={currentGroup.endAsHour} onChange={handleChange} placeholder="14:00" />
+                    <input type="time" name="endAsHour" className="form-input" value={currentGroup.endAsHour} onChange={handleChange} />
                  </div>
               </div>
               <div className="form-group">

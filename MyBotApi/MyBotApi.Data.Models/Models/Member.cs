@@ -15,7 +15,7 @@ namespace MyBotApi.Data.Models.Models
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public int Age { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Column(TypeName = "timestamptz")]
         public DateTimeOffset JoinTime { get; set; }

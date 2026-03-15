@@ -13,17 +13,17 @@ namespace MyBotApi.Data.Models.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public string ImageLink { get; set; }
+        public string? Description { get; set; }
+        public string? ImageLink { get; set; }
 
-        public string DayOfWeek { get; set; }
+        public string? DayOfWeek { get; set; }
 
         [Column(TypeName = "timestamptz")]
         public DateTimeOffset CreatedAt { get; set; }
-        public string StartAsHour { get; set; } = null!;
-        public string EndAsHour { get; set; } = null!;
+        public string? StartAsHour { get; set; }
+        public string? EndAsHour { get; set; }
         public int MaxMembers { get; set; }
-        public string Location { get; set; } = null!;
+        public string? Location { get; set; }
         public int MinAge { get; set; }
         public int MaxAge { get; set; }
         public ICollection<Member> Members { get; set; } = new List<Member>();

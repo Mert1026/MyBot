@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace MyBotApi.Data.Models.Models
         public string Email { get; set; }
 
         public string? DisplayName { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public string Role { get; set; }
         public string ImageLink { get; set; }
         public bool EmailVerified { get; set; }

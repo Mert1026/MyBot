@@ -10,12 +10,12 @@
     },
     "locations": {
         "title": "Our <span>Locations</span>",
-        "sofia": "Sofia Center",
-        "sofiaAddr": "blvd. Alexander Malinov",
-        "plovdiv": "Plovdiv Branch",
-        "plovdivAddr": "str. Kapitan Raycho",
-        "varna": "Varna Studio",
-        "varnaAddr": "str. Slivnitsa"
+        "gabrovo": "Gabrovo",
+        "gabrovoAddr": "3 Dunav St., Curly Bridge House",
+        "vt": "Veliko Tarnovo",
+        "vtAddr": "2A Maria Gabrovska St., Intelekti Learning Center",
+        "varna": "Varna, Sts. Constantine and Helena Resort",
+        "varnaAddr": "46 St., No. 12"
     },
     "trainings": {
         "title": "Active <span>Courses</span>",
@@ -24,12 +24,9 @@
         "course2": "Programming Masterclass",
         "course2Desc": "Advanced software concepts, Python, and algorithmic integration.",
         "course3": "Engineering & Hardware",
-        "course3Desc": "Soldering, PCB design, and custom electronics construction."
-    },
-    "events": {
-         "title": "Upcoming <span>Events</span>",
-         "event1": "National Robotics Competition",
-         "event2": "Open House Week",
-         "event3": "Summer Tech Camp 2026"
+        "course3Desc": "Soldering, PCB design, and custom electronics construction.",
+        "showMore": "Show More",
+        "allCourses": "All <span>Courses</span>",
+        "allCoursesSubtitle": "Browse all available groups and courses"
     }
 }
