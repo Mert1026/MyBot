@@ -11,6 +11,7 @@ const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState(null);
+  const [allMembers, setAllMembers] = useState([]);
 
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [formToApprove, setFormToApprove] = useState(null);
@@ -27,14 +28,26 @@ const Applications = () => {
         setForms(res.data.data?.filter(f => !f.isDeleted) || []);
       }
     } catch (error) {
-      toast.error('Failed to fetch application forms');
+      toast.error(t('Failed to fetch data'));
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchMembers = async () => {
+    try {
+      const res = await api.get('/Members/all');
+      if (res.data.success) {
+        setAllMembers(res.data.data?.filter(m => !m.isDeleted) || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch members for info modal');
+    }
+  };
+
   useEffect(() => {
     fetchForms();
+    fetchMembers();
   }, []);
 
   const openModal = (form = null) => {
@@ -105,7 +118,7 @@ const Applications = () => {
   };
 
   const handleDelete = async (id) => {
-    if(!window.confirm(`Are you sure you want to delete this application form?`)) return;
+    if(!window.confirm(t('common.deleteConfirm'))) return;
     try {
       const res = await api.delete(`/ApplicationForms/softDelete?id=${id}`);
       if (res.data.success) {
@@ -128,25 +141,26 @@ const Applications = () => {
 
       <div className="card">
         {loading ? (
-          <p>Loading application forms...</p>
+          <p>{t('common.loading')}</p>
         ) : forms.length === 0 ? (
-          <p>No application forms found.</p>
+          <p>{t('common.noData')}</p>
         ) : (
           <div className="table-container">
             <table className="table">
               <thead>
                 <tr>
-                  <th>Form ID</th>
-                  <th>{t('applications.parentName') || 'Parent Name'}</th>
-                  <th>{t('applications.contact') || 'Contact Info'}</th>
-                  <th>{t('applications.location') || 'Location'}</th>
-                  <th>{t('applications.date') || 'Created At'}</th>
-                  <th>{t('applications.actions') || 'Actions'}</th>
+                  <th>{t('common.formId')}</th>
+                  <th>{t('applications.parentName')}</th>
+                  <th>{t('applications.contact')}</th>
+                  <th>{t('applications.location')}</th>
+                  <th>{t('applications.status')}</th>
+                  <th>{t('applications.date')}</th>
+                  <th>{t('applications.actions')}</th>
                 </tr>
               </thead>
               <tbody>
                 {forms.map((form) => (
-                  <tr key={form.id}>
+                  <tr key={form.id} style={{ backgroundColor: form.isApproved ? '#dcfce7' : '#fee2e2' }}>
                     <td><span style={{fontFamily:'monospace', fontSize:'0.75rem'}} title={form.id}>{form.id.substring(0,8)}...</span></td>
                     <td><strong>{form.parentFirstName} {form.parentLastName}</strong></td>
                     <td>
@@ -156,19 +170,26 @@ const Applications = () => {
                         </div>
                     </td>
                     <td>{form.location}</td>
+                    <td>
+                        <span className={form.isApproved ? 'badge badge-success' : 'badge badge-danger'}>
+                            {form.isApproved ? t('applications.approved') : t('applications.pending')}
+                        </span>
+                    </td>
                     <td>{formatDateForView(form.createdAt)}</td>
                     <td>
                       <div className="flex-end">
-                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openApproveModal(form)}>
-                          <CheckCircle size={14} /> Approve
-                        </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(form)} title="Info">
+                        {!form.isApproved && (
+                          <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openApproveModal(form)}>
+                            <CheckCircle size={14} /> {t('applications.approve')}
+                          </button>
+                        )}
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(form)} title={t('common.info')}>
                           <Info size={14} />
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(form)} title="Edit">
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(form)} title={t('common.edit')}>
                           <Edit size={14} />
                         </button>
-                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(form.id)} title="Delete">
+                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(form.id)} title={t('common.delete')}>
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -187,38 +208,48 @@ const Applications = () => {
           <div className="modal-content fade-in text-left" style={{maxWidth: '600px'}}>
             <div className="flex-between" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
                 <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Info size={24} color="var(--primary-color)" /> Form Information
+                    <Info size={24} color="var(--primary-color)" /> {t('applications.formInfo')}
                 </h2>
                 <button onClick={() => setIsInfoModalOpen(false)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 <div>
-                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Parent Details</h3>
-                    <p><strong>Name:</strong> {infoForm.parentFirstName} {infoForm.parentLastName}</p>
-                    <p><strong>Email:</strong> <a href={`mailto:${infoForm.email}`}>{infoForm.email}</a></p>
-                    <p><strong>Phone:</strong> {infoForm.phoneNumber}</p>
-                    <p><strong>Location:</strong> {infoForm.location}</p>
-                    <p><strong>Submitted:</strong> {formatDateForView(infoForm.createdAt)}</p>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>{t('applications.parentDetails')}</h3>
+                    <p><strong>{t('common.name')}:</strong> {infoForm.parentFirstName} {infoForm.parentLastName}</p>
+                    <p><strong>{t('auth.email')}:</strong> <a href={`mailto:${infoForm.email}`}>{infoForm.email}</a></p>
+                    <p><strong>{t('parents.phone')}:</strong> {infoForm.phoneNumber}</p>
+                    <p><strong>{t('applications.location')}:</strong> {infoForm.location}</p>
+                    <p><strong>{t('applications.date')}:</strong> {formatDateForView(infoForm.createdAt)}</p>
                 </div>
                 <div>
-                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Kids Enrolled ({infoForm.kids?.length || 0})</h3>
-                    {infoForm.kids && infoForm.kids.length > 0 ? (
-                        <ul style={{ listStyleType: 'none', padding: 0 }}>
-                            {infoForm.kids.map((kid, idx) => (
-                                <li key={idx} style={{ padding: '0.5rem', backgroundColor: '#f8fafc', borderRadius: '4px', marginBottom: '0.5rem', border: '1px solid #e2e8f0' }}>
-                                    <strong>{kid.firstName} {kid.lastName}</strong><br/>
-                                    Age: {kid.age}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p style={{ color: '#64748b' }}>No kids listed in this formulation.</p>
-                    )}
+                    {(() => {
+                        const formKids = allMembers.filter(m => m.applicationFormId === infoForm.id);
+                        return (
+                            <>
+                                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>{t('applications.kidsMembers')} ({formKids.length})</h3>
+                                {formKids.length > 0 ? (
+                                    <ul style={{ listStyleType: 'none', padding: 0 }}>
+                                        {formKids.map((kid) => (
+                                            <li key={kid.id} style={{ padding: '0.5rem', backgroundColor: '#f8fafc', borderRadius: '4px', marginBottom: '0.5rem', border: '1px solid #e2e8f0' }}>
+                                                <strong>{kid.firstName} {kid.lastName}</strong><br/>
+                                                <span style={{ fontSize: '0.85rem', color: '#64748b' }}>{t('common.age')}: {kid.age} · </span>
+                                                <span className={kid.status ? 'badge badge-success' : 'badge badge-danger'} style={{ fontSize: '0.7rem' }}>
+                                                    {kid.status ? t('common.active') : t('common.inactive')}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p style={{ color: '#64748b' }}>{t('applications.noKids')}</p>
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
             </div>
             <div className="flex-end">
-                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
+                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>{t('common.close')}</button>
             </div>
           </div>
         </div>
@@ -229,37 +260,37 @@ const Applications = () => {
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left">
             <div className="flex-between" style={{ marginBottom: '1rem' }}>
-                <h2>{currentForm?.id ? 'Edit Application Form' : 'Create Application Form'}</h2>
+                <h2>{currentForm?.id ? t('applications.editForm') : t('applications.createForm')}</h2>
                 <button onClick={closeModal} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="grid-2">
                   <div className="form-group">
-                    <label className="form-label">Parent First Name</label>
+                    <label className="form-label">{t('applications.parentFirstName')}</label>
                     <input required type="text" name="parentFirstName" className="form-input" value={currentForm.parentFirstName} onChange={handleChange} />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Parent Last Name</label>
+                    <label className="form-label">{t('applications.parentLastName')}</label>
                     <input required type="text" name="parentLastName" className="form-input" value={currentForm.parentLastName} onChange={handleChange} />
                   </div>
               </div>
               <div className="grid-2">
                  <div className="form-group">
-                    <label className="form-label">Email</label>
+                    <label className="form-label">{t('auth.email')}</label>
                     <input required type="email" name="email" className="form-input" value={currentForm.email} onChange={handleChange} />
                  </div>
                  <div className="form-group">
-                    <label className="form-label">Phone Number</label>
+                    <label className="form-label">{t('apply.phone')}</label>
                     <input required type="text" name="phoneNumber" className="form-input" value={currentForm.phoneNumber} onChange={handleChange} />
                  </div>
               </div>
               <div className="form-group">
-                  <label className="form-label">Location Request</label>
+                  <label className="form-label">{t('applications.locationRequest')}</label>
                   <input required type="text" name="location" className="form-input" value={currentForm.location} onChange={handleChange} />
               </div>
               <div className="flex-end" style={{ marginTop: '2rem' }}>
-                 <button type="button" className="btn btn-outline" onClick={closeModal}>Cancel</button>
-                 <button type="submit" className="btn btn-primary">{currentForm?.id ? 'Save Changes' : 'Create Submit'}</button>
+                 <button type="button" className="btn btn-outline" onClick={closeModal}>{t('common.cancel')}</button>
+                 <button type="submit" className="btn btn-primary">{currentForm?.id ? t('common.save') : t('applications.createSubmit')}</button>
               </div>
             </form>
           </div>
@@ -270,13 +301,13 @@ const Applications = () => {
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left" style={{maxWidth: '400px'}}>
             <div className="flex-between" style={{ marginBottom: '1rem' }}>
-                <h2>Approve Application</h2>
+                <h2>{t('applications.approveTitle')}</h2>
                 <button onClick={closeApproveModal} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
-            <p style={{marginBottom: '1rem'}}>Approving this application will activate the parent and kids.</p>
+            <p style={{marginBottom: '1rem'}}>{t('applications.approveDesc')}</p>
             <form onSubmit={handleApprove}>
                <div className="form-group">
-                  <label className="form-label">Payment Period Start Date</label>
+                  <label className="form-label">{t('applications.paymentStartDate')}</label>
                   <input 
                     required 
                     type="date" 
@@ -286,8 +317,8 @@ const Applications = () => {
                   />
               </div>
               <div className="flex-end" style={{ marginTop: '1.5rem' }}>
-                 <button type="button" className="btn btn-outline" onClick={closeApproveModal}>Cancel</button>
-                 <button type="submit" className="btn btn-success">Confirm Approval</button>
+                 <button type="button" className="btn btn-outline" onClick={closeApproveModal}>{t('common.cancel')}</button>
+                 <button type="submit" className="btn btn-success">{t('applications.confirmApproval')}</button>
               </div>
             </form>
           </div>

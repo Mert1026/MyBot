@@ -3,9 +3,11 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { BookOpen } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './Login.css';
 
 const Login = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +23,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      toast.error('Please fill in all fields');
+      toast.error(t('auth.fillFields') || 'Please fill in all fields');
       return;
     }
 
@@ -30,10 +32,10 @@ const Login = () => {
     setIsSubmitting(false);
 
     if (result.success) {
-      toast.success('Login successful');
+      toast.success(t('auth.loginSuccess') || 'Login successful');
       navigate('/');
     } else {
-      toast.error(result.message || 'Failed to login');
+      toast.error(result.message || t('auth.loginFailed') || 'Failed to login');
     }
   };
 
@@ -44,13 +46,13 @@ const Login = () => {
       <div className="login-card fade-in">
         <div className="login-header">
           <BookOpen size={48} className="login-icon" />
-          <h1 className="login-title">MyBot Admin Portals</h1>
-          <p className="login-subtitle">Sign in to manage your school system</p>
+          <h1 className="login-title">{t('auth.signInTitle')}</h1>
+          <p className="login-subtitle">{t('auth.signInSubtitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label className="form-label" htmlFor="email">Email Address</label>
+            <label className="form-label" htmlFor="email">{t('auth.email')}</label>
             <input
               id="email"
               type="email"
@@ -62,7 +64,7 @@ const Login = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label" htmlFor="password">Password</label>
+            <label className="form-label" htmlFor="password">{t('auth.password')}</label>
             <input
               id="password"
               type="password"
@@ -78,7 +80,7 @@ const Login = () => {
             className="btn btn-primary login-btn"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
+            {isSubmitting ? t('auth.signingIn') : t('auth.signInBtn')}
           </button>
         </form>
       </div>

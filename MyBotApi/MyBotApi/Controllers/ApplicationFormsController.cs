@@ -326,6 +326,10 @@ namespace MyBotApi.Controllers
                 var form = await _applicationFormRepository.GetByIdAsync(approvalDto.ApplicationFormId);
                 if (form == null) return NotFound(new ApiResponse<bool> { Success = false, Message = "Application form not found" });
 
+                // Mark form as approved
+                form.IsApproved = true;
+                await _applicationFormRepository.UpdateAsync(form);
+
                 // Find the associated parent
                 var parents = await _parentRepository.GetAllAsync();
                 var parent = parents.FirstOrDefault(p => p.ApplicationFormId == form.Id);

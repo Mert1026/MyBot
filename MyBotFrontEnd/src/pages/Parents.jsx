@@ -315,9 +315,49 @@ const Parents = () => {
                         </span>
                         {isOverdue(infoParent.payedUntil) && <span style={{ color: '#dc2626', marginLeft: '0.5rem', fontSize: '0.85rem' }}>(Overdue)</span>}
                     </p>
-                    <p><strong>Kids Enrolled:</strong> {allMembers.filter(m => m.parentId === infoParent.id).length || 0}</p>
                 </div>
             </div>
+
+            {/* Kids Section */}
+            {(() => {
+                const parentKids = allMembers.filter(m => m.parentId === infoParent.id);
+                return (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569', borderTop: '1px solid #e2e8f0', paddingTop: '1rem' }}>Kids / Members ({parentKids.length})</h3>
+                        {parentKids.length > 0 ? (
+                            <div className="table-container">
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Age</th>
+                                            <th>Status</th>
+                                            <th>Born Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {parentKids.map(kid => (
+                                            <tr key={kid.id}>
+                                                <td><strong>{kid.firstName} {kid.lastName}</strong></td>
+                                                <td>{kid.age} yrs</td>
+                                                <td>
+                                                    <span className={kid.status ? 'badge badge-success' : 'badge badge-danger'}>
+                                                        {kid.status ? 'Active' : 'Inactive'}
+                                                    </span>
+                                                </td>
+                                                <td>{formatDateForView(kid.bornDate)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <p style={{ color: '#64748b' }}>No kids/members linked to this parent.</p>
+                        )}
+                    </div>
+                );
+            })()}
+
             <div className="flex-end">
                 <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
             </div>

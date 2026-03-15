@@ -1,4 +1,4 @@
-﻿using MyBotApi.Data.Models.Models.DTOs;
+using MyBotApi.Data.Models.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +17,7 @@ namespace MyBotApi.Data.Models.Models
         public string Location { get; set; }
         public ICollection<Member> Kids { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
-        public bool IsDeleted { get; set; } 
+        public bool IsDeleted { get; set; }
+        public bool IsApproved { get; set; }
     }
 }
