@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens.Experimental;
 using MyBotApi.Data.Models.Models;
@@ -141,6 +141,7 @@ namespace MyBotApi.Controllers
                     MaxAge = groupCreateDto.MaxAge,
                     MinAge = groupCreateDto.MinAge,
                     Location = groupCreateDto.Location,
+                    DayOfWeek = groupCreateDto.DayOfWeek,
                     Members = new List<Member>(),
                     // Assuming UserName is actually a string representation of the UserId
                 };
@@ -199,6 +200,7 @@ namespace MyBotApi.Controllers
                 existingGroup.StartAsHour = groupDto.StartAsHour;
                 existingGroup.EndAsHour = groupDto.EndAsHour;
                 existingGroup.UserId = Guid.Parse(groupDto.UserId);
+                existingGroup.DayOfWeek = groupDto.DayOfWeek;
                 existingGroup.ImageLink = groupDto.ImageLink;
                 await _groupRepository.UpdateAsync(existingGroup);
                 Group toShow = new Group()
@@ -217,6 +219,7 @@ namespace MyBotApi.Controllers
                     MaxMembers = existingGroup.MaxMembers,
                     MaxAge = existingGroup.MaxAge,
                     Location = existingGroup.Location,
+                    DayOfWeek = existingGroup.DayOfWeek,
                 };
                 return Ok(new ApiResponse<Group>
                 {

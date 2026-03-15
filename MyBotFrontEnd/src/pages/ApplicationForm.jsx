@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import ReCAPTCHA from 'react-google-recaptcha';
 import api from '../utils/api';
+import Footer from '../components/Footer';
 import './Home.css';
 
 const ApplicationForm = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const recaptchaRef = useRef(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
   const [formData, setFormData] = useState({
     parentFirstName: '',
     parentLastName: '',
@@ -21,6 +25,10 @@ const ApplicationForm = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -52,6 +60,10 @@ const ApplicationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error(t('apply.captchaRequired') || 'Please verify you are not a robot.');
+      return;
+    }
     setLoading(true);
     
     try {
@@ -59,6 +71,8 @@ const ApplicationForm = () => {
       if (res.data.success) {
         toast.success(t('apply.success') || 'Application submitted successfully! We will contact you soon.');
         setFormData({ parentFirstName: '', parentLastName: '', phoneNumber: '', email: '', location: '', kids: [{ firstName: '', lastName: '', age: '' }] });
+        setCaptchaToken(null);
+        if (recaptchaRef.current) recaptchaRef.current.reset();
         setTimeout(() => navigate('/'), 2000);
       }
     } catch (error) {
@@ -81,6 +95,13 @@ const ApplicationForm = () => {
          boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
          backdropFilter: 'blur(10px)'
       }}>
+         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+            <div className="home-lang-toggle">
+              <button onClick={() => changeLanguage('en')} className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}>EN</button>
+              <button onClick={() => changeLanguage('bg')} className={`lang-btn ${i18n.language === 'bg' ? 'active' : ''}`}>BG</button>
+            </div>
+         </div>
+
          <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '2rem' }} dangerouslySetInnerHTML={{ __html: t('apply.title') || 'Apply <span>Now</span>' }}>
          </h2>
          <p style={{ textAlign: 'center', color: '#94a3b8', marginBottom: '2.5rem' }}>
@@ -128,10 +149,9 @@ const ApplicationForm = () => {
                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.5)', color: '#fff' }}
                >
                  <option value="" disabled>Select a City...</option>
-                 <option value="Sofia">Sofia</option>
-                 <option value="Plovdiv">Plovdiv</option>
-                 <option value="Varna">Varna</option>
-                 <option value="Remote">Remote / Online</option>
+                 <option value="Габрово">Габрово</option>
+                 <option value="Велико Търново">Велико Търново</option>
+                 <option value="Варна">Варна</option>
                </select>
             </div>
 
@@ -140,7 +160,7 @@ const ApplicationForm = () => {
                {formData.kids.map((kid, index) => (
                  <div key={index} style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                       <span style={{ color: '#b8e600', fontWeight: 'bold' }}>{t('apply.child') || 'Child'} #{index + 1}</span>
+                       <span style={{ color: '#2196F3', fontWeight: 'bold' }}>{t('apply.child') || 'Child'} #{index + 1}</span>
                        {formData.kids.length > 1 && (
                          <button type="button" onClick={() => removeKid(index)} style={{ background: 'transparent', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '0.9rem' }}>
                            ✕ {t('apply.remove') || 'Remove'}
@@ -168,7 +188,17 @@ const ApplicationForm = () => {
                </button>
             </div>
 
-            <button type="submit" disabled={loading} className="glow-btn" style={{ marginTop: '1.5rem', width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                onChange={(token) => setCaptchaToken(token)}
+                onExpired={() => setCaptchaToken(null)}
+                theme="dark"
+              />
+            </div>
+
+            <button type="submit" disabled={loading || !captchaToken} className="hero-btn-primary" style={{ marginTop: '1.5rem', width: '100%', fontSize: '1rem', padding: '1rem', borderRadius: '12px', opacity: (!captchaToken || loading) ? 0.5 : 1, cursor: (!captchaToken || loading) ? 'not-allowed' : 'pointer' }}>
                {loading ? (t('apply.submitting') || 'Submitting...') : (t('apply.submit') || 'Submit Application')}
             </button>
          </form>
@@ -179,7 +209,8 @@ const ApplicationForm = () => {
             </button>
          </div>
       </div>
-      
+
+      <Footer />
     </div>
   );
 }

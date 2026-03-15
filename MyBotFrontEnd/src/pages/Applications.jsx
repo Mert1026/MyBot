@@ -134,9 +134,6 @@ const Applications = () => {
     <div className="fade-in">
       <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
         <h1>{t('applications.title') || 'Application Forms'}</h1>
-        <button className="btn btn-primary" onClick={() => openModal()}>
-          <Plus size={16} /> {t('applications.addForm') || 'Add Application Form'}
-        </button>
       </div>
 
       <div className="card">

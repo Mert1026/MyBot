@@ -220,7 +220,8 @@
 /* --- TRAININGS SECTION --- */
 .trainings-section { padding: 100px 2rem; background-color: #030712; position: relative; }
 .trainings-container { max-width: 1280px; margin: 0 auto; }
-.courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; }
+.courses-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+@media (max-width: 768px) { .courses-grid { grid-template-columns: 1fr; } }
 
 .course-card {
   background: rgba(255, 255, 255, 0.02);

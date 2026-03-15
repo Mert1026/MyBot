@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import './Home.css';
 
 import photo1 from '../assets/photo_1.jpg';
@@ -76,8 +77,7 @@ const Courses = () => {
                        <h3>{group.name}</h3>
                        <p>{group.description || t('common.noData')}</p>
                        <div style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#64748b' }}>
-                         <p>📅 {group.dayOfWeek || 'N/A'} · ⏰ {group.startAsHour || '?'} - {group.endAsHour || '?'}</p>
-                         <p>📍 {group.location || 'N/A'} · 👶 {group.minAge}-{group.maxAge} yrs · 👥 Max {group.maxMembers}</p>
+                         <p>{group.dayOfWeek && `${group.dayOfWeek}`}{group.startAsHour && ` · ${group.startAsHour} - ${group.endAsHour}`}{group.location && ` · ${group.location}`}</p>
                        </div>
                        <button 
                          className="base-btn outline-btn w-full mt-2" 
@@ -99,6 +99,8 @@ const Courses = () => {
             </div>
          </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

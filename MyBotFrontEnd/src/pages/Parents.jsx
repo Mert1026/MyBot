@@ -112,14 +112,14 @@ const Parents = () => {
 
       let total = 0;
       if (paymentType === 'full') {
-          // Rule: 160 BGN for 1st child, sibling discount 20 BGN (so 140 BGN for siblings)
-          const firstChildPrice = 160;
-          const siblingPrice = 140;
+          // Rule: 82 EUR for 1st child, sibling discount 10 EUR (so 72 EUR for siblings)
+          const firstChildPrice = 82;
+          const siblingPrice = 72;
           const pricePerMonth = firstChildPrice + (kidsCount - 1) * siblingPrice;
           total = pricePerMonth * paymentQuantity;
       } else {
-          // Rule: 45 BGN per lesson (no sibling discount mentioned for single visits in prompt, using flat rate)
-          const pricePerLesson = 45;
+          // Rule: 23 EUR per lesson
+          const pricePerLesson = 23;
           total = pricePerLesson * kidsCount * paymentQuantity;
       }
       setCalculatedTotal(total);
@@ -229,10 +229,10 @@ const Parents = () => {
                 <tr>
                   <th>{t('parents.name') || 'Name'}</th>
                   <th>{t('parents.contact') || 'Contact Info'}</th>
-                  <th>Total Paid (BGN)</th>
+                  <th>{t('parents.totalPaid') || 'Total Paid (EUR)'}</th>
                   <th>{t('parents.paidUntil') || 'Payed Until'}</th>
-                  <th>Join Time</th>
-                  <th>Application Form</th>
+                  <th>{t('parents.joinTime') || 'Join Time'}</th>
+                  <th>{t('parents.applicationForm') || 'Application Form'}</th>
                   <th>{t('parents.actions') || 'Actions'}</th>
                 </tr>
               </thead>
@@ -246,7 +246,7 @@ const Parents = () => {
                             <div style={{color:'var(--color-text-secondary)'}}>{parent.phoneNumber}</div>
                         </div>
                     </td>
-                    <td>{parent.totalPaid?.toFixed(2) || '0.00'} лв.</td>
+                    <td>{parent.totalPaid?.toFixed(2) || '0.00'} €</td>
                     <td>
                       <span style={{ color: isOverdue(parent.payedUntil) ? '#dc2626' : 'inherit', fontWeight: isOverdue(parent.payedUntil) ? 'bold' : 'normal' }}>
                          {formatDateForView(parent.payedUntil)}
@@ -260,11 +260,11 @@ const Parents = () => {
                     </td>
                     <td>
                       <div className="flex-end">
-                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openPaymentModal(parent)} title="Record Payment">
-                          <DollarSign size={14} /> Pay
+                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openPaymentModal(parent)} title={t('parents.recordPayment') || 'Record Payment'}>
+                          <DollarSign size={14} /> {t('parents.pay') || 'Pay'}
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewKidsParent(parent)} title="View Kids">
-                          <span style={{ fontSize: '14px', marginRight: '4px' }}>👨‍👩‍👧‍👦</span> {t('parents.viewKids') || 'Kids'}
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewKidsParent(parent)} title={t('parents.viewKids') || 'Kids'}>
+                          {t('parents.viewKids') || 'Kids'}
                         </button>
                         <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(parent)} title="Info">
                           <Info size={14} />
@@ -291,29 +291,29 @@ const Parents = () => {
           <div className="modal-content fade-in text-left" style={{maxWidth: '600px'}}>
             <div className="flex-between" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
                 <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Info size={24} color="var(--primary-color)" /> Parent Information
+                    <Info size={24} color="var(--primary-color)" /> {t('common.info') || 'Information'}
                 </h2>
                 <button onClick={() => setIsInfoModalOpen(false)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 <div>
-                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Personal Details</h3>
-                    <p><strong>Name:</strong> {infoParent.firstName} {infoParent.lastName}</p>
-                    <p><strong>Email:</strong> <a href={`mailto:${infoParent.email}`}>{infoParent.email}</a></p>
-                    <p><strong>Phone:</strong> {infoParent.phoneNumber}</p>
-                    <p><strong>Join Time:</strong> {formatDateForView(infoParent.joinTime)}</p>
-                    <p><strong>App Form ID:</strong> <span style={{fontSize: '0.8rem', fontFamily: 'monospace'}}>{infoParent.applicationFormId || 'None'}</span></p>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>{t('parents.personalDetails') || 'Personal Details'}</h3>
+                    <p><strong>{t('parents.name') || 'Name'}:</strong> {infoParent.firstName} {infoParent.lastName}</p>
+                    <p><strong>{t('parents.email') || 'Email'}:</strong> <a href={`mailto:${infoParent.email}`}>{infoParent.email}</a></p>
+                    <p><strong>{t('parents.phone') || 'Phone'}:</strong> {infoParent.phoneNumber}</p>
+                    <p><strong>{t('parents.joinTime') || 'Join Time'}:</strong> {formatDateForView(infoParent.joinTime)}</p>
+                    <p><strong>{t('parents.formId') || 'App Form ID'}:</strong> <span style={{fontSize: '0.8rem', fontFamily: 'monospace'}}>{infoParent.applicationFormId || 'None'}</span></p>
                 </div>
                 <div>
-                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Financial Status</h3>
-                    <p><strong>Total Paid:</strong> {infoParent.totalPaid?.toFixed(2) || '0.00'} BGN</p>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>{t('parents.financialStatus') || 'Financial Status'}</h3>
+                    <p><strong>{t('parents.totalPaid') || 'Total Paid'}:</strong> {infoParent.totalPaid?.toFixed(2) || '0.00'} EUR</p>
                     <p>
-                        <strong>Paid Until Date:</strong> 
+                        <strong>{t('parents.paidUntil') || 'Paid Until Date'}:</strong> 
                         <span style={{ marginLeft: '0.4rem', color: isOverdue(infoParent.payedUntil) ? '#dc2626' : 'inherit', fontWeight: isOverdue(infoParent.payedUntil) ? 'bold' : 'normal' }}>
                             {formatDateForView(infoParent.payedUntil)}
                         </span>
-                        {isOverdue(infoParent.payedUntil) && <span style={{ color: '#dc2626', marginLeft: '0.5rem', fontSize: '0.85rem' }}>(Overdue)</span>}
+                        {isOverdue(infoParent.payedUntil) && <span style={{ color: '#dc2626', marginLeft: '0.5rem', fontSize: '0.85rem' }}>({t('parents.overdue') || 'Overdue'})</span>}
                     </p>
                 </div>
             </div>
@@ -329,10 +329,10 @@ const Parents = () => {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Age</th>
-                                            <th>Status</th>
-                                            <th>Born Date</th>
+                                            <th>{t('members.name') || 'Name'}</th>
+                                            <th>{t('members.age') || 'Age'}</th>
+                                            <th>{t('members.status') || 'Status'}</th>
+                                            <th>{t('members.bornDate') || 'Born Date'}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -342,7 +342,7 @@ const Parents = () => {
                                                 <td>{kid.age} yrs</td>
                                                 <td>
                                                     <span className={kid.status ? 'badge badge-success' : 'badge badge-danger'}>
-                                                        {kid.status ? 'Active' : 'Inactive'}
+                                                        {kid.status ? (t('members.active') || 'Active') : (t('members.inactive') || 'Inactive')}
                                                     </span>
                                                 </td>
                                                 <td>{formatDateForView(kid.bornDate)}</td>
@@ -359,7 +359,7 @@ const Parents = () => {
             })()}
 
             <div className="flex-end">
-                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
+                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>{t('common.close') || 'Close'}</button>
             </div>
           </div>
         </div>
@@ -370,41 +370,41 @@ const Parents = () => {
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left">
             <div className="flex-between" style={{ marginBottom: '1rem' }}>
-                <h2>{currentParent?.parentId ? 'Edit Parent' : 'Create Parent'}</h2>
+                <h2>{currentParent?.parentId ? (t('parents.editParent') || 'Edit Parent') : (t('parents.createParent') || 'Create Parent')}</h2>
                 <button onClick={closeModal} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="grid-2">
                   <div className="form-group">
-                    <label className="form-label">First Name</label>
+                    <label className="form-label">{t('parents.firstName') || 'First Name'}</label>
                     <input required type="text" name="firstName" className="form-input" value={currentParent.firstName} onChange={handleChange} />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Last Name</label>
+                    <label className="form-label">{t('parents.lastName') || 'Last Name'}</label>
                     <input required type="text" name="lastName" className="form-input" value={currentParent.lastName} onChange={handleChange} />
                   </div>
               </div>
               <div className="grid-2">
                  <div className="form-group">
-                    <label className="form-label">Email</label>
+                    <label className="form-label">{t('parents.email') || 'Email'}</label>
                     <input required type="email" name="email" className="form-input" value={currentParent.email} onChange={handleChange} />
                  </div>
                  <div className="form-group">
-                    <label className="form-label">Phone Number</label>
+                    <label className="form-label">{t('parents.phoneNumber') || 'Phone Number'}</label>
                     <input required type="text" name="phoneNumber" className="form-input" value={currentParent.phoneNumber} onChange={handleChange} />
                  </div>
               </div>
               <div className="form-group">
-                  <label className="form-label">Given Price (Legacy)</label>
+                  <label className="form-label">{t('parents.givenPrice') || 'Given Price (Legacy)'}</label>
                   <input type="number" step="0.01" name="givenPrice" className="form-input" value={currentParent.givenPrice} onChange={handleChange} />
               </div>
               <div className="grid-2">
                  <div className="form-group">
-                    <label className="form-label">Payed Until</label>
+                    <label className="form-label">{t('parents.paidUntil') || 'Payed Until'}</label>
                     <input required type="datetime-local" name="payedUntil" className="form-input" value={currentParent.payedUntil} onChange={handleChange} />
                  </div>
                  <div className="form-group">
-                    <label className="form-label">Join Time</label>
+                    <label className="form-label">{t('parents.joinTime') || 'Join Time'}</label>
                     <input required type="datetime-local" name="joinTime" className="form-input" value={currentParent.joinTime} onChange={handleChange} />
                  </div>
               </div>
@@ -420,8 +420,8 @@ const Parents = () => {
                   </select>
               </div>
               <div className="flex-end" style={{ marginTop: '2rem' }}>
-                 <button type="button" className="btn btn-outline" onClick={closeModal}>Cancel</button>
-                 <button type="submit" className="btn btn-primary">{currentParent?.parentId ? 'Save Changes' : 'Create'}</button>
+                 <button type="button" className="btn btn-outline" onClick={closeModal}>{t('common.cancel') || 'Cancel'}</button>
+                 <button type="submit" className="btn btn-primary">{currentParent?.parentId ? (t('parents.saveChanges') || 'Save Changes') : (t('parents.create') || 'Create')}</button>
               </div>
             </form>
           </div>
@@ -433,24 +433,24 @@ const Parents = () => {
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left" style={{maxWidth: '450px'}}>
             <div className="flex-between" style={{ marginBottom: '1rem' }}>
-                <h2>Record Payment</h2>
+                <h2>{t('parents.recordPayment') || 'Record Payment'}</h2>
                 <button onClick={closePaymentModal} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
             <form onSubmit={handleRecordPayment}>
                <div className="form-group">
-                   <label className="form-label">Payment Package</label>
+                   <label className="form-label">{t('parents.paymentPackage') || 'Payment Package'}</label>
                    <select 
                        className="form-select" 
                        value={paymentType} 
                        onChange={(e) => setPaymentType(e.target.value)}
                    >
-                       <option value="full">Monthly Fee (160 лв + sibling discount)</option>
-                       <option value="partial">Single/Partial Lessons (45 лв / lesson)</option>
+                       <option value="full">{t('parents.monthlyFee') || 'Monthly Fee (82€ + sibling discount)'}</option>
+                       <option value="partial">{t('parents.singleLessons') || 'Single/Partial Lessons (23€ / lesson)'}</option>
                    </select>
                </div>
                
                <div className="form-group">
-                   <label className="form-label">{paymentType === 'full' ? 'Number of Months' : 'Number of Lessons (per child)'}</label>
+                   <label className="form-label">{paymentType === 'full' ? (t('parents.numMonths') || 'Number of Months') : (t('parents.numLessons') || 'Number of Lessons (per child)')}</label>
                    <input 
                        type="number" 
                        min="1" 
@@ -462,18 +462,18 @@ const Parents = () => {
 
                <div style={{ padding: '1rem', backgroundColor: '#f3f4f6', borderRadius: '0.5rem', margin: '1rem 0' }}>
                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                       <span>Kids Enrolled:</span>
-                       <strong>{allMembers.filter(m => m.parentId === paymentParent.id && m.status === true).length} active</strong>
+                       <span>{t('parents.kidsEnrolled') || 'Kids Enrolled'}:</span>
+                       <strong>{allMembers.filter(m => m.parentId === paymentParent.id && m.status === true).length} {t('parents.active') || 'active'}</strong>
                    </div>
                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 'bold' }}>
-                       <span>Estimated Total:</span>
-                       <span>{calculatedTotal} лв.</span>
+                       <span>{t('parents.estimatedTotal') || 'Estimated Total'}:</span>
+                       <span>{calculatedTotal} €</span>
                    </div>
                </div>
 
                <div className="flex-end" style={{ marginTop: '1.5rem' }}>
-                 <button type="button" className="btn btn-outline" onClick={closePaymentModal}>Cancel</button>
-                 <button type="submit" className="btn btn-success">Confirm Payment</button>
+                 <button type="button" className="btn btn-outline" onClick={closePaymentModal}>{t('common.cancel') || 'Cancel'}</button>
+                 <button type="submit" className="btn btn-success">{t('parents.confirmPayment') || 'Confirm Payment'}</button>
               </div>
             </form>
           </div>
@@ -484,13 +484,13 @@ const Parents = () => {
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left" style={{ maxWidth: '800px' }}>
             <div className="flex-between" style={{ marginBottom: '1rem' }}>
-                <h2>Kids of {viewKidsParent.firstName} {viewKidsParent.lastName}</h2>
+                <h2>{t('parents.viewKids') || 'Kids'} of {viewKidsParent.firstName} {viewKidsParent.lastName}</h2>
                 <button onClick={() => setViewKidsParent(null)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
             </div>
             {(() => {
                 const parentKids = allMembers.filter(m => m.parentId === viewKidsParent.id) || []; 
                   
-                if (parentKids.length === 0) return <p>No kids currently registered for this parent.</p>;
+                if (parentKids.length === 0) return <p>{t('applications.noKids') || 'No kids currently registered for this parent.'}</p>;
                 return (
                   <div className="table-container">
                     <table className="table">

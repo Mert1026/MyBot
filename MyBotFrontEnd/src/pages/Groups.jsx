@@ -118,7 +118,7 @@ const Groups = () => {
   };
 
   const getDayName = (dayStr) => {
-    return dayStr || 'N/A';
+    return dayStr || '-';
   };
 
   return (
@@ -156,7 +156,7 @@ const Groups = () => {
                   <tr key={group.id}>
                     <td><strong>{group.name}</strong></td>
                     <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}} title={group.description}>
-                      {group.description || 'N/A'}
+                      {group.description || '-'}
                     </td>
                     <td>{getDayName(group.dayOfWeek)}</td>
                     <td>{group.startAsHour} - {group.endAsHour}</td>
@@ -164,7 +164,7 @@ const Groups = () => {
                     <td>
                         {(() => {
                            const mappedCount = allMembers.filter(m => m.groupId === group.id).length;
-                           return `${mappedCount} / ${group.maxMembers}`;
+                           return `${mappedCount}/${group.maxMembers}`;
                         })()}
                     </td>
                     <td>{group.location}</td>
@@ -254,7 +254,12 @@ const Groups = () => {
               <div className="grid-2">
                  <div className="form-group">
                     <label className="form-label">Location</label>
-                    <input type="text" name="location" className="form-input" value={currentGroup.location} onChange={handleChange} />
+                    <select name="location" className="form-select" value={currentGroup.location} onChange={handleChange}>
+                       <option value="">Select a Location...</option>
+                       <option value="Габрово">Габрово</option>
+                       <option value="Велико Търново">Велико Търново</option>
+                       <option value="Варна">Варна</option>
+                    </select>
                  </div>
                  <div className="form-group">
                     <label className="form-label">Max Members</label>

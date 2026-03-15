@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,6 +19,7 @@ namespace MyBotApi.Data.Models.Models.DTOs
         public string Location { get; set; }
         public int MembersCount { get; set; }
         public int MaxMembers { get; set; }
+        public string DayOfWeek { get; set; }
         public string UserId { get; set; }
     }
 }
