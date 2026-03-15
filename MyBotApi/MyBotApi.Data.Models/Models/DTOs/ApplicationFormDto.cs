@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +13,13 @@ namespace MyBotApi.Data.Models.Models.DTOs
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Location { get; set; }
+        public List<ChildDto> Kids { get; set; } = new List<ChildDto>();
+    }
+
+    public class ChildDto
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Age { get; set; }
     }
 }

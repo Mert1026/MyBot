@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBotApi.Data.Models.Models;
 using MyBotApi.Data.Models.Models.DTOs.MemberDTOs;
@@ -116,6 +116,8 @@ namespace MyBotApi.Controllers
                         Message = "Group not found"
                     });
                 }
+                
+                await _groupRepository.AddMemberToGroupAsync(member, group.Id);
 
                 return Ok(new ApiResponse<Member>
                 {
@@ -193,6 +195,9 @@ namespace MyBotApi.Controllers
                 existingMember.ParentId = Guid.Parse(memberDto.ParentId);
                 existingMember.ApplicationFormId = Guid.Parse(memberDto.ApplicationFormId);
                 await _memberRepository.UpdateAsync(existingMember);
+                
+                await _groupRepository.AddMemberToGroupAsync(existingMember, existingGroup.Id);
+
                 Member toShow = new Member
                 {
                     Id = existingMember.Id,

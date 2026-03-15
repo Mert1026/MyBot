@@ -1,0 +1,35 @@
+{
+    "about": {
+        "title": "About <span>Us</span>",
+        "missionTitle": "Our Mission",
+        "missionDesc": "To build a foundation of logical thinking and innovation through hands-on robotics and coding experiences.",
+        "feature1Title": "Advanced Curriculum",
+        "feature1Desc": "Structured learning paths from fundamental block programming to advanced algorithms and robotics design.",
+        "feature2Title": "Expert Mentors",
+        "feature2Desc": "Guided by experienced instructors passionate about technology and student development."
+    },
+    "locations": {
+        "title": "Our <span>Locations</span>",
+        "sofia": "Sofia Center",
+        "sofiaAddr": "blvd. Alexander Malinov",
+        "plovdiv": "Plovdiv Branch",
+        "plovdivAddr": "str. Kapitan Raycho",
+        "varna": "Varna Studio",
+        "varnaAddr": "str. Slivnitsa"
+    },
+    "trainings": {
+        "title": "Active <span>Courses</span>",
+        "course1": "Robotics Fundamentals",
+        "course1Desc": "Introduction to robot building and visual programming for beginners.",
+        "course2": "Programming Masterclass",
+        "course2Desc": "Advanced software concepts, Python, and algorithmic integration.",
+        "course3": "Engineering & Hardware",
+        "course3Desc": "Soldering, PCB design, and custom electronics construction."
+    },
+    "events": {
+         "title": "Upcoming <span>Events</span>",
+         "event1": "National Robotics Competition",
+         "event2": "Open House Week",
+         "event3": "Summer Tech Camp 2026"
+    }
+}

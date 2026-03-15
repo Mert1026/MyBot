@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBotApi.Data.Models.Models;
 using MyBotApi.Data.Models.Models.DTOs;
@@ -13,12 +13,19 @@ namespace MyBotApi.Controllers
     {
         private readonly ILogger<ApplicationFormsController> _logger;
         private readonly IApplicationFormRepository _applicationFormRepository;
+        private readonly IParentRepository _parentRepository;
+        private readonly IMemberRepository _memberRepository;
+
         public ApplicationFormsController(
-            ILogger<ApplicationFormsController> logger
-            ,IApplicationFormRepository applicationFormRepository)
+            ILogger<ApplicationFormsController> logger,
+            IApplicationFormRepository applicationFormRepository,
+            IParentRepository parentRepository,
+            IMemberRepository memberRepository)
         {
             _logger = logger;
             _applicationFormRepository = applicationFormRepository;
+            _parentRepository = parentRepository;
+            _memberRepository = memberRepository;
         }
 
         [HttpGet("all")]
@@ -129,7 +136,7 @@ namespace MyBotApi.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [AllowAnonymous]
         [HttpPost("create")]
         public async Task<ActionResult<ApiResponse<ApplicationForm>>> CreateForm(ApplicationFormDto formDto)
         {
@@ -145,7 +152,42 @@ namespace MyBotApi.Controllers
                     CreatedAt = DateTimeOffset.UtcNow
                 };
 
+                // 1. Create Application Form
                 await _applicationFormRepository.CreateAsync(form);
+
+                // 2. Automatically generate the Parent record to satisfy Member constraints
+                var parent = new Parent
+                {
+                    FirstName = formDto.ParentFirstName,
+                    LastName = formDto.ParentLastName,
+                    PhoneNumber = formDto.PhoneNumber,
+                    Email = formDto.Email,
+                    JoinTime = DateTimeOffset.UtcNow,
+                    PayedUntil = DateTimeOffset.UtcNow,
+                    ApplicationFormId = form.Id
+                };
+                await _parentRepository.CreateAsync(parent);
+
+                // 3. Register Kids as new deactivated Members linked to the Parent
+                if (formDto.Kids != null)
+                {
+                    foreach (var k in formDto.Kids)
+                    {
+                        var member = new Member
+                        {
+                            FirstName = k.FirstName,
+                            LastName = k.LastName,
+                            Age = k.Age,
+                            Description = $"Applied via public form for {formDto.Location}",
+                            JoinTime = DateTimeOffset.UtcNow,
+                            BornDate = DateTimeOffset.UtcNow.AddYears(-k.Age),
+                            Status = false, // Inactive by default
+                            ParentId = parent.Id,
+                            ApplicationFormId = form.Id
+                        };
+                        await _memberRepository.CreateAsync(member);
+                    }
+                }
 
                 return Ok(new ApiResponse<ApplicationForm>
                 {
