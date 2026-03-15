@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { formatDateForView, formatDateForInput } from '../utils/dateUtils';
-import { Plus, Edit, Trash2, X, RefreshCw } from 'lucide-react';
+import { Plus, Edit, Trash2, X, RefreshCw, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Members = () => {
@@ -12,6 +12,10 @@ const Members = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentMember, setCurrentMember] = useState(null);
   
+  // Info Modal State
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoMember, setInfoMember] = useState(null);
+
   // Dropdown states
   const [groupsList, setGroupsList] = useState([]);
   const [parentsList, setParentsList] = useState([]);
@@ -22,7 +26,7 @@ const Members = () => {
       setLoading(true);
       const res = await api.get('/Members/all');
       if (res.data.success) {
-        setMembers(res.data.data || []);
+        setMembers(res.data.data?.filter(m => !m.isDeleted) || []);
       }
     } catch (error) {
       toast.error('Failed to fetch members');
@@ -38,9 +42,9 @@ const Members = () => {
           api.get('/Parents/all'),
           api.get('/ApplicationForms/all')
        ]);
-       if (gRes.data.success) setGroupsList(gRes.data.data || []);
-       if (pRes.data.success) setParentsList(pRes.data.data || []);
-       if (fRes.data.success) setFormsList(fRes.data.data || []);
+       if (gRes.data.success) setGroupsList(gRes.data.data?.filter(g => !g.isDeleted) || []);
+       if (pRes.data.success) setParentsList(pRes.data.data?.filter(p => !p.isDeleted) || []);
+       if (fRes.data.success) setFormsList(fRes.data.data?.filter(f => !f.isDeleted) || []);
     } catch (error) {
        toast.error('Failed to load related dropdown data');
     }
@@ -74,6 +78,11 @@ const Members = () => {
   const closeModal = () => {
     setCurrentMember(null);
     setIsModalOpen(false);
+  };
+
+  const openInfoModal = (member) => {
+    setInfoMember(member);
+    setIsInfoModalOpen(true);
   };
 
   const handleChange = (e) => {
@@ -175,8 +184,8 @@ const Members = () => {
                     </td>
                     <td>
                         <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-                            <div>Parent: {member.parentId ? member.parentId.substring(0,8)+'...' : 'N/A'}</div>
-                            <div>Form: {member.applicationFormId ? member.applicationFormId.substring(0,8)+'...' : 'N/A'}</div>
+                            <div title={member.parentId}>Parent: {member.parentId ? member.parentId.substring(0,8)+'...' : 'N/A'}</div>
+                            <div title={member.applicationFormId}>Form: {member.applicationFormId ? member.applicationFormId.substring(0,8)+'...' : 'N/A'}</div>
                         </div>
                     </td>
                     <td>
@@ -184,10 +193,13 @@ const Members = () => {
                         <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => toggleStatus(member.id, member.status)} title="Toggle Status">
                           <RefreshCw size={14} />
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(member)}>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(member)} title="Info">
+                          <Info size={14} />
+                        </button>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(member)} title="Edit">
                           <Edit size={14} />
                         </button>
-                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(member.id)}>
+                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(member.id)} title="Delete">
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -199,6 +211,45 @@ const Members = () => {
           </div>
         )}
       </div>
+
+      {/* Info Modal */}
+      {isInfoModalOpen && infoMember && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in text-left" style={{maxWidth: '600px'}}>
+            <div className="flex-between" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
+                <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Info size={24} color="var(--primary-color)" /> Member Information
+                </h2>
+                <button onClick={() => setIsInfoModalOpen(false)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Personal Details</h3>
+                    <p><strong>Name:</strong> {infoMember.firstName} {infoMember.lastName}</p>
+                    <p><strong>Age:</strong> {infoMember.age} years</p>
+                    <p><strong>Born Date:</strong> {formatDateForView(infoMember.bornDate)}</p>
+                    <p><strong>Join Time:</strong> {formatDateForView(infoMember.joinTime)}</p>
+                    <p><strong>Description:</strong> {infoMember.description || 'No description provided.'}</p>
+                </div>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Status & Links</h3>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span className={infoMember.status ? 'badge badge-success' : 'badge badge-danger'} style={{ marginLeft: '0.5rem' }}>
+                            {infoMember.status ? 'Active' : 'Inactive'}
+                        </span>
+                    </p>
+                    <p><strong>Parent ID:</strong> <span style={{fontSize: '0.8rem', fontFamily: 'monospace'}}>{infoMember.parentId || 'None'}</span></p>
+                    <p><strong>App Form ID:</strong> <span style={{fontSize: '0.8rem', fontFamily: 'monospace'}}>{infoMember.applicationFormId || 'None'}</span></p>
+                </div>
+            </div>
+            <div className="flex-end">
+                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isModalOpen && (
         <div className="modal-overlay">

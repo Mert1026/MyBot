@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { formatDateForView, formatDateForInput } from '../utils/dateUtils';
-import { Plus, Edit, Trash2, X, DollarSign } from 'lucide-react';
+import { Plus, Edit, Trash2, X, DollarSign, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Parents = () => {
@@ -14,6 +14,10 @@ const Parents = () => {
   const [allMembers, setAllMembers] = useState([]);
   const [formsList, setFormsList] = useState([]);
   const [viewKidsParent, setViewKidsParent] = useState(null);
+
+  // Info Modal State
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoParent, setInfoParent] = useState(null);
 
   // Payment Modal State
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -27,7 +31,7 @@ const Parents = () => {
       setLoading(true);
       const res = await api.get('/Parents/all');
       if (res.data.success) {
-        setParents(res.data.data || []);
+        setParents(res.data.data?.filter(p => !p.isDeleted) || []);
       }
     } catch (error) {
       toast.error('Failed to fetch parents');
@@ -43,10 +47,10 @@ const Parents = () => {
           api.get('/ApplicationForms/all')
       ]);
       if (memRes.data.success) {
-        setAllMembers(memRes.data.data || []);
+        setAllMembers(memRes.data.data?.filter(m => !m.isDeleted) || []);
       }
       if (formRes.data.success) {
-        setFormsList(formRes.data.data || []);
+        setFormsList(formRes.data.data?.filter(f => !f.isDeleted) || []);
       }
     } catch (error) {
        toast.error('Failed to load related data for parent view');
@@ -79,6 +83,11 @@ const Parents = () => {
   const closeModal = () => {
     setCurrentParent(null);
     setIsModalOpen(false);
+  };
+
+  const openInfoModal = (parent) => {
+    setInfoParent(parent);
+    setIsInfoModalOpen(true);
   };
 
   // --- Payment Logic ---
@@ -251,16 +260,19 @@ const Parents = () => {
                     </td>
                     <td>
                       <div className="flex-end">
-                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openPaymentModal(parent)}>
+                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openPaymentModal(parent)} title="Record Payment">
                           <DollarSign size={14} /> Pay
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewKidsParent(parent)}>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewKidsParent(parent)} title="View Kids">
                           <span style={{ fontSize: '14px', marginRight: '4px' }}>👨‍👩‍👧‍👦</span> {t('parents.viewKids') || 'Kids'}
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(parent)}>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(parent)} title="Info">
+                          <Info size={14} />
+                        </button>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(parent)} title="Edit">
                           <Edit size={14} />
                         </button>
-                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(parent.id)}>
+                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(parent.id)} title="Delete">
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -272,6 +284,46 @@ const Parents = () => {
           </div>
         )}
       </div>
+
+      {/* Info Modal */}
+      {isInfoModalOpen && infoParent && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in text-left" style={{maxWidth: '600px'}}>
+            <div className="flex-between" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
+                <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Info size={24} color="var(--primary-color)" /> Parent Information
+                </h2>
+                <button onClick={() => setIsInfoModalOpen(false)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Personal Details</h3>
+                    <p><strong>Name:</strong> {infoParent.firstName} {infoParent.lastName}</p>
+                    <p><strong>Email:</strong> <a href={`mailto:${infoParent.email}`}>{infoParent.email}</a></p>
+                    <p><strong>Phone:</strong> {infoParent.phoneNumber}</p>
+                    <p><strong>Join Time:</strong> {formatDateForView(infoParent.joinTime)}</p>
+                    <p><strong>App Form ID:</strong> <span style={{fontSize: '0.8rem', fontFamily: 'monospace'}}>{infoParent.applicationFormId || 'None'}</span></p>
+                </div>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Financial Status</h3>
+                    <p><strong>Total Paid:</strong> {infoParent.totalPaid?.toFixed(2) || '0.00'} BGN</p>
+                    <p>
+                        <strong>Paid Until Date:</strong> 
+                        <span style={{ marginLeft: '0.4rem', color: isOverdue(infoParent.payedUntil) ? '#dc2626' : 'inherit', fontWeight: isOverdue(infoParent.payedUntil) ? 'bold' : 'normal' }}>
+                            {formatDateForView(infoParent.payedUntil)}
+                        </span>
+                        {isOverdue(infoParent.payedUntil) && <span style={{ color: '#dc2626', marginLeft: '0.5rem', fontSize: '0.85rem' }}>(Overdue)</span>}
+                    </p>
+                    <p><strong>Kids Enrolled:</strong> {allMembers.filter(m => m.parentId === infoParent.id).length || 0}</p>
+                </div>
+            </div>
+            <div className="flex-end">
+                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Existing Edit/Create Modal */}
       {isModalOpen && (

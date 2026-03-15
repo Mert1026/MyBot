@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { formatDateForView } from '../utils/dateUtils';
-import { Plus, Edit, Trash2, X, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Users, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Groups = () => {
@@ -15,12 +15,16 @@ const Groups = () => {
   const [teachers, setTeachers] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
 
+  // Info Modal State
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoGroup, setInfoGroup] = useState(null);
+
   const fetchGroups = async () => {
     try {
       setLoading(true);
       const res = await api.get('/Groups/all');
       if (res.data.success) {
-        setGroups(res.data.data || []);
+        setGroups(res.data.data?.filter(g => !g.isDeleted) || []);
       }
     } catch (error) {
       toast.error('Failed to fetch groups');
@@ -44,7 +48,7 @@ const Groups = () => {
     try {
       const res = await api.get('/Members/all');
       if (res.data.success) {
-        setAllMembers(res.data.data || []);
+        setAllMembers(res.data.data?.filter(m => !m.isDeleted) || []);
       }
     } catch (error) {
        toast.error('Failed to load members for group view');
@@ -68,6 +72,11 @@ const Groups = () => {
   const closeModal = () => {
     setCurrentGroup(null);
     setIsModalOpen(false);
+  };
+
+  const openInfoModal = (group) => {
+    setInfoGroup(group);
+    setIsInfoModalOpen(true);
   };
 
   const handleChange = (e) => {
@@ -163,14 +172,17 @@ const Groups = () => {
                     <td>{formatDateForView(group.createdAt)}</td>
                     <td>
                       <div className="flex-end">
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewMembersGroup(group)}>
-                          <Users size={14} /> {t('groups.viewMembers') || 'View Members'}
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewMembersGroup(group)} title="View Members">
+                          <Users size={14} /> {t('groups.viewMembers') || 'Members'}
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(group)}>
-                          <Edit size={14} /> {t('groups.edit') || 'Edit'}
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(group)} title="Info">
+                          <Info size={14} />
                         </button>
-                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(group.name)}>
-                          <Trash2 size={14} /> {t('groups.delete') || 'Delete'}
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(group)} title="Edit">
+                          <Edit size={14} /> 
+                        </button>
+                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(group.name)} title="Delete">
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </td>
@@ -181,6 +193,41 @@ const Groups = () => {
           </div>
         )}
       </div>
+
+      {/* Info Modal */}
+      {isInfoModalOpen && infoGroup && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in text-left" style={{maxWidth: '600px'}}>
+            <div className="flex-between" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
+                <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Info size={24} color="var(--primary-color)" /> Group Information
+                </h2>
+                <button onClick={() => setIsInfoModalOpen(false)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Overview</h3>
+                    <p><strong>Name:</strong> {infoGroup.name}</p>
+                    <p><strong>Location:</strong> {infoGroup.location}</p>
+                    <p><strong>Description:</strong> {infoGroup.description || 'No description provided.'}</p>
+                    <p><strong>Teacher ID:</strong> <span style={{fontSize: '0.8rem', fontFamily: 'monospace'}}>{infoGroup.userId}</span></p>
+                    <p><strong>Created:</strong> {formatDateForView(infoGroup.createdAt)}</p>
+                </div>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Schedule & Requirements</h3>
+                    <p><strong>Day:</strong> {getDayName(infoGroup.dayOfWeek)}</p>
+                    <p><strong>Time:</strong> {infoGroup.startAsHour} - {infoGroup.endAsHour}</p>
+                    <p><strong>Age Range:</strong> {infoGroup.minAge} to {infoGroup.maxAge} years</p>
+                    <p><strong>Capacity:</strong> {allMembers.filter(m => m.groupId === infoGroup.id).length} / {infoGroup.maxMembers} members</p>
+                </div>
+            </div>
+            <div className="flex-end">
+                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isModalOpen && (
         <div className="modal-overlay">

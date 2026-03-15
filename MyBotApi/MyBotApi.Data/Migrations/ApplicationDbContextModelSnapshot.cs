@@ -62,7 +62,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationForms");
+                    b.ToTable("ApplicationForms", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.Group", b =>
@@ -133,7 +133,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.Member", b =>
@@ -195,7 +195,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Members");
+                    b.ToTable("Members", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.Parent", b =>
@@ -260,7 +260,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parents");
+                    b.ToTable("Parents", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.RefreshToken", b =>
@@ -292,7 +292,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.SMSModel", b =>
@@ -328,7 +328,7 @@ namespace MyBotApi.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SMSHistory");
+                    b.ToTable("SMSHistory", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.User", b =>
@@ -390,7 +390,7 @@ namespace MyBotApi.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("MyBotApi.Data.Models.Models.Group", b =>

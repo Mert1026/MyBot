@@ -59,7 +59,7 @@ namespace MyBotApi.Data
                     .HasForeignKey(e => e.ParentId)
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
-
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
             modelBuilder.Entity<Group>(entity =>
@@ -81,6 +81,7 @@ namespace MyBotApi.Data
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
 
@@ -106,7 +107,7 @@ namespace MyBotApi.Data
                 entity.Property(e => e.PhoneNumber).IsRequired();
                 entity.Property(e => e.Location).IsRequired();
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
-
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
             modelBuilder.Entity<Parent>(entity =>
@@ -121,6 +122,7 @@ namespace MyBotApi.Data
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.PayedUntil).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
             modelBuilder.Entity<SMSModel>(entity =>
@@ -130,6 +132,7 @@ namespace MyBotApi.Data
                 entity.Property(e => e.Message).HasMaxLength(DescriptionMaxLength);//TODO
                 entity.Property(e => e.PhoneNumber).IsRequired();
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
     }   }
 }

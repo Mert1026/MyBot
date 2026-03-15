@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { formatDateForView } from '../utils/dateUtils';
-import { Plus, Edit, Trash2, X, CheckCircle } from 'lucide-react';
+import { Plus, Edit, Trash2, X, CheckCircle, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Applications = () => {
@@ -16,12 +16,15 @@ const Applications = () => {
   const [formToApprove, setFormToApprove] = useState(null);
   const [paymentStartDate, setPaymentStartDate] = useState(new Date().toISOString().split('T')[0]);
 
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoForm, setInfoForm] = useState(null);
+
   const fetchForms = async () => {
     try {
       setLoading(true);
       const res = await api.get('/ApplicationForms/all');
       if (res.data.success) {
-        setForms(res.data.data || []);
+        setForms(res.data.data?.filter(f => !f.isDeleted) || []);
       }
     } catch (error) {
       toast.error('Failed to fetch application forms');
@@ -57,6 +60,11 @@ const Applications = () => {
     setIsApproveModalOpen(false);
   };
 
+  const openInfoModal = (form) => {
+    setInfoForm(form);
+    setIsInfoModalOpen(true);
+  };
+
   const handleApprove = async (e) => {
       e.preventDefault();
       try {
@@ -67,14 +75,12 @@ const Applications = () => {
           if (res.data.success) {
               toast.success('Application approved successfully!');
               closeApproveModal();
-              // Optionally refresh forms, although they might not disappear unless we filter them out
               fetchForms();
           }
       } catch(err) {
           toast.error(err.response?.data?.message || 'Failed to approve application');
       }
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -156,10 +162,13 @@ const Applications = () => {
                         <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openApproveModal(form)}>
                           <CheckCircle size={14} /> Approve
                         </button>
-                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(form)}>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openInfoModal(form)} title="Info">
+                          <Info size={14} />
+                        </button>
+                        <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(form)} title="Edit">
                           <Edit size={14} />
                         </button>
-                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(form.id)}>
+                        <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(form.id)} title="Delete">
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -172,6 +181,50 @@ const Applications = () => {
         )}
       </div>
 
+      {/* Info Modal */}
+      {isInfoModalOpen && infoForm && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in text-left" style={{maxWidth: '600px'}}>
+            <div className="flex-between" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
+                <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Info size={24} color="var(--primary-color)" /> Form Information
+                </h2>
+                <button onClick={() => setIsInfoModalOpen(false)} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Parent Details</h3>
+                    <p><strong>Name:</strong> {infoForm.parentFirstName} {infoForm.parentLastName}</p>
+                    <p><strong>Email:</strong> <a href={`mailto:${infoForm.email}`}>{infoForm.email}</a></p>
+                    <p><strong>Phone:</strong> {infoForm.phoneNumber}</p>
+                    <p><strong>Location:</strong> {infoForm.location}</p>
+                    <p><strong>Submitted:</strong> {formatDateForView(infoForm.createdAt)}</p>
+                </div>
+                <div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: '#475569' }}>Kids Enrolled ({infoForm.kids?.length || 0})</h3>
+                    {infoForm.kids && infoForm.kids.length > 0 ? (
+                        <ul style={{ listStyleType: 'none', padding: 0 }}>
+                            {infoForm.kids.map((kid, idx) => (
+                                <li key={idx} style={{ padding: '0.5rem', backgroundColor: '#f8fafc', borderRadius: '4px', marginBottom: '0.5rem', border: '1px solid #e2e8f0' }}>
+                                    <strong>{kid.firstName} {kid.lastName}</strong><br/>
+                                    Age: {kid.age}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p style={{ color: '#64748b' }}>No kids listed in this formulation.</p>
+                    )}
+                </div>
+            </div>
+            <div className="flex-end">
+                <button type="button" className="btn btn-outline" onClick={() => setIsInfoModalOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit/Create Modal */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left">
