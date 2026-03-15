@@ -60,7 +60,7 @@ const Groups = () => {
   const openModal = (group = null) => {
     setCurrentGroup(group ? { ...group } : {
         name: '', description: '', startAsHour: '', endAsHour: '', 
-        userId: '', imageLink: '', maxMembers: 0, minAge: 0, maxAge: 0, location: ''
+        userId: '', imageLink: '', maxMembers: 0, minAge: 0, maxAge: 0, location: '', dayOfWeek: 1
     });
     setIsModalOpen(true);
   };
@@ -108,6 +108,11 @@ const Groups = () => {
     }
   };
 
+  const getDayName = (dayNumber) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[dayNumber] || 'Unknown';
+  };
+
   return (
     <div className="fade-in">
       <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
@@ -129,6 +134,7 @@ const Groups = () => {
                 <tr>
                   <th>{t('groups.name') || 'Name'}</th>
                   <th>{t('groups.description') || 'Description'}</th>
+                  <th>Day</th>
                   <th>{t('groups.hours') ? t('groups.hours', { start: 'Start', end: 'End' }) : 'Hours'}</th>
                   <th>Age Range</th>
                   <th>Members</th>
@@ -144,6 +150,7 @@ const Groups = () => {
                     <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}} title={group.description}>
                       {group.description || 'N/A'}
                     </td>
+                    <td>{getDayName(group.dayOfWeek)}</td>
                     <td>{group.startAsHour} - {group.endAsHour}</td>
                     <td>{group.minAge} to {group.maxAge} yrs</td>
                     <td>
@@ -218,14 +225,26 @@ const Groups = () => {
                     <input type="number" name="maxAge" className="form-input" value={currentGroup.maxAge} onChange={handleChange} />
                  </div>
               </div>
-              <div className="grid-2">
+              <div className="grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
                  <div className="form-group">
-                    <label className="form-label">Start Time (e.g. 08:00)</label>
-                    <input type="text" name="startAsHour" className="form-input" value={currentGroup.startAsHour} onChange={handleChange} />
+                    <label className="form-label">Day of Week</label>
+                    <select name="dayOfWeek" className="form-select" value={currentGroup.dayOfWeek} onChange={handleChange}>
+                        <option value={1}>Monday</option>
+                        <option value={2}>Tuesday</option>
+                        <option value={3}>Wednesday</option>
+                        <option value={4}>Thursday</option>
+                        <option value={5}>Friday</option>
+                        <option value={6}>Saturday</option>
+                        <option value={0}>Sunday</option>
+                    </select>
                  </div>
                  <div className="form-group">
-                    <label className="form-label">End Time (e.g. 14:00)</label>
-                    <input type="text" name="endAsHour" className="form-input" value={currentGroup.endAsHour} onChange={handleChange} />
+                    <label className="form-label">Start Time</label>
+                    <input type="text" name="startAsHour" className="form-input" value={currentGroup.startAsHour} onChange={handleChange} placeholder="08:00" />
+                 </div>
+                 <div className="form-group">
+                    <label className="form-label">End Time</label>
+                    <input type="text" name="endAsHour" className="form-input" value={currentGroup.endAsHour} onChange={handleChange} placeholder="14:00" />
                  </div>
               </div>
               <div className="form-group">

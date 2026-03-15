@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBotApi.Data.Models.Models;
 using MyBotApi.Data.Models.Models.DTOs.ParentDTOs;
@@ -253,6 +253,48 @@ namespace MyBotApi.Controllers
                 {
                     Success = false,
                     Message = $"An error occurred while deleting the parent - {ex.InnerException?.Message ?? ex.Message}"
+                });
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("recordPayment")]
+        public async Task<ActionResult<ApiResponse<Parent>>> RecordPaymentAsync([FromBody] RecordPaymentDto paymentDto)
+        {
+            try
+            {
+                var parent = await _parentRepository.GetByIdAsync(paymentDto.ParentId);
+                if (parent == null)
+                {
+                    return NotFound(new ApiResponse<Parent>
+                    {
+                        Success = false,
+                        Message = "Parent not found"
+                    });
+                }
+
+                // Update total paid
+                parent.TotalPaid += paymentDto.AmountPaid;
+
+                // Update PayedUntil based on rules from front-end
+                parent.PayedUntil = paymentDto.NewPayedUntil;
+
+                await _parentRepository.UpdateAsync(parent);
+
+                return Ok(new ApiResponse<Parent>
+                {
+                    Success = true,
+                    Message = "Payment recorded successfully",
+                    Data = parent
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error recording payment for parent id {paymentDto.ParentId}");
+                return StatusCode(500, new ApiResponse<Parent>
+                {
+                    Success = false,
+                    Message = $"An error occurred while recording the payment - {ex.InnerException?.Message ?? ex.Message}"
                 });
             }
         }

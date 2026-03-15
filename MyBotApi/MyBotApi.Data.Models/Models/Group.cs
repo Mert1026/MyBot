@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +15,8 @@ namespace MyBotApi.Data.Models.Models
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string ImageLink { get; set; }
+
+        public string DayOfWeek { get; set; }
 
         [Column(TypeName = "timestamptz")]
         public DateTimeOffset CreatedAt { get; set; }

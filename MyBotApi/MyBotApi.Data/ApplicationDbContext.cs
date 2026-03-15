@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore;
 using MyBotApi.Data.Models.Models;
@@ -75,6 +75,7 @@ namespace MyBotApi.Data
                 entity.Property(e => e.MinAge).IsRequired();
                 entity.Property(e => e.MaxAge).IsRequired();
                 entity.Property(e => e.Location).IsRequired();
+                entity.Property(e => e.DayOfWeek).HasMaxLength(DescriptionMaxLength);
                 entity.HasOne(e => e.User)
                     .WithMany(u => u.Groups)
                     .HasForeignKey(e => e.UserId)
@@ -116,6 +117,7 @@ namespace MyBotApi.Data
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(NameMaxLength);
                 entity.Property(e => e.PhoneNumber).IsRequired();
                 entity.Property(e => e.GivenPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.TotalPaid).HasColumnType("decimal(18,2)").HasDefaultValue(0);
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
                 entity.Property(e => e.PayedUntil).HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");

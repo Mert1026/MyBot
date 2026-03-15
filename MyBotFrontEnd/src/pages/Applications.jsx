@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { formatDateForView } from '../utils/dateUtils';
-import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { Plus, Edit, Trash2, X, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Applications = () => {
@@ -11,6 +11,10 @@ const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState(null);
+
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [formToApprove, setFormToApprove] = useState(null);
+  const [paymentStartDate, setPaymentStartDate] = useState(new Date().toISOString().split('T')[0]);
 
   const fetchForms = async () => {
     try {
@@ -41,6 +45,36 @@ const Applications = () => {
     setCurrentForm(null);
     setIsModalOpen(false);
   };
+
+  const openApproveModal = (form) => {
+    setFormToApprove(form);
+    setPaymentStartDate(new Date().toISOString().split('T')[0]);
+    setIsApproveModalOpen(true);
+  };
+
+  const closeApproveModal = () => {
+    setFormToApprove(null);
+    setIsApproveModalOpen(false);
+  };
+
+  const handleApprove = async (e) => {
+      e.preventDefault();
+      try {
+          const res = await api.post('/ApplicationForms/approve', {
+              applicationFormId: formToApprove.id,
+              paymentStartDate: new Date(paymentStartDate).toISOString()
+          });
+          if (res.data.success) {
+              toast.success('Application approved successfully!');
+              closeApproveModal();
+              // Optionally refresh forms, although they might not disappear unless we filter them out
+              fetchForms();
+          }
+      } catch(err) {
+          toast.error(err.response?.data?.message || 'Failed to approve application');
+      }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,6 +153,9 @@ const Applications = () => {
                     <td>{formatDateForView(form.createdAt)}</td>
                     <td>
                       <div className="flex-end">
+                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openApproveModal(form)}>
+                          <CheckCircle size={14} /> Approve
+                        </button>
                         <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(form)}>
                           <Edit size={14} />
                         </button>
@@ -170,6 +207,34 @@ const Applications = () => {
               <div className="flex-end" style={{ marginTop: '2rem' }}>
                  <button type="button" className="btn btn-outline" onClick={closeModal}>Cancel</button>
                  <button type="submit" className="btn btn-primary">{currentForm?.id ? 'Save Changes' : 'Create Submit'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isApproveModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in text-left" style={{maxWidth: '400px'}}>
+            <div className="flex-between" style={{ marginBottom: '1rem' }}>
+                <h2>Approve Application</h2>
+                <button onClick={closeApproveModal} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
+            </div>
+            <p style={{marginBottom: '1rem'}}>Approving this application will activate the parent and kids.</p>
+            <form onSubmit={handleApprove}>
+               <div className="form-group">
+                  <label className="form-label">Payment Period Start Date</label>
+                  <input 
+                    required 
+                    type="date" 
+                    className="form-input" 
+                    value={paymentStartDate} 
+                    onChange={(e) => setPaymentStartDate(e.target.value)} 
+                  />
+              </div>
+              <div className="flex-end" style={{ marginTop: '1.5rem' }}>
+                 <button type="button" className="btn btn-outline" onClick={closeApproveModal}>Cancel</button>
+                 <button type="submit" className="btn btn-success">Confirm Approval</button>
               </div>
             </form>
           </div>

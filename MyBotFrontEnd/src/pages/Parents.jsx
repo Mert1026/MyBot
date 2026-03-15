@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { formatDateForView, formatDateForInput } from '../utils/dateUtils';
-import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { Plus, Edit, Trash2, X, DollarSign } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Parents = () => {
@@ -14,6 +14,13 @@ const Parents = () => {
   const [allMembers, setAllMembers] = useState([]);
   const [formsList, setFormsList] = useState([]);
   const [viewKidsParent, setViewKidsParent] = useState(null);
+
+  // Payment Modal State
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentParent, setPaymentParent] = useState(null);
+  const [paymentType, setPaymentType] = useState('full'); // 'full' or 'partial'
+  const [paymentQuantity, setPaymentQuantity] = useState(1); // months or lessons
+  const [calculatedTotal, setCalculatedTotal] = useState(0);
 
   const fetchParents = async () => {
     try {
@@ -62,7 +69,7 @@ const Parents = () => {
        });
     } else {
         setCurrentParent({
-            firstName: '', lastName: '', email: '', phoneNumber: '', givenPrice: 0,
+            firstName: '', lastName: '', email: '', phoneNumber: '', givenPrice: 0, totalPaid: 0,
             payedUntil: '', joinTime: '', applicationFormId: ''
         });
     }
@@ -73,6 +80,77 @@ const Parents = () => {
     setCurrentParent(null);
     setIsModalOpen(false);
   };
+
+  // --- Payment Logic ---
+  const openPaymentModal = (parent) => {
+      setPaymentParent(parent);
+      setPaymentType('full');
+      setPaymentQuantity(1);
+      setIsPaymentModalOpen(true);
+  };
+
+  const closePaymentModal = () => {
+      setPaymentParent(null);
+      setIsPaymentModalOpen(false);
+  };
+
+  // Calculate payment whenever inputs change
+  useEffect(() => {
+      if (!paymentParent || !allMembers) return;
+      
+      const activeKids = allMembers.filter(m => m.parentId === paymentParent.id && m.status === true).length;
+      const kidsCount = activeKids > 0 ? activeKids : 1; // Default to 1 if no kids found for safety
+
+      let total = 0;
+      if (paymentType === 'full') {
+          // Rule: 160 BGN for 1st child, sibling discount 20 BGN (so 140 BGN for siblings)
+          const firstChildPrice = 160;
+          const siblingPrice = 140;
+          const pricePerMonth = firstChildPrice + (kidsCount - 1) * siblingPrice;
+          total = pricePerMonth * paymentQuantity;
+      } else {
+          // Rule: 45 BGN per lesson (no sibling discount mentioned for single visits in prompt, using flat rate)
+          const pricePerLesson = 45;
+          total = pricePerLesson * kidsCount * paymentQuantity;
+      }
+      setCalculatedTotal(total);
+  }, [paymentParent, paymentType, paymentQuantity, allMembers]);
+
+  const handleRecordPayment = async (e) => {
+      e.preventDefault();
+      try {
+          // Calculate new PayedUntil date
+          let newDate = new Date(paymentParent.payedUntil);
+          if (isNaN(newDate.getTime())) newDate = new Date(); // fallback if invalid
+
+          if (paymentType === 'full') {
+              newDate.setMonth(newDate.getMonth() + Number(paymentQuantity));
+          } else {
+              // For partial, we don't advance the month by a full calendar month.
+              // We'll just add days proportionally or leave it to admin to manually adjust later if needed.
+              // Assuming 'partial' usually means covering the current ongoing month.
+              // Let's just advance it by the number of weeks (lessons) for simplicity, or 7 days per lesson
+              newDate.setDate(newDate.getDate() + (Number(paymentQuantity) * 7)); 
+          }
+
+          const payload = {
+              parentId: paymentParent.id,
+              amountPaid: calculatedTotal,
+              monthsAdded: paymentType === 'full' ? Number(paymentQuantity) : 0,
+              newPayedUntil: newDate.toISOString()
+          };
+
+          const res = await api.post('/Parents/recordPayment', payload);
+          if (res.data.success) {
+              toast.success('Payment recorded successfully');
+              closePaymentModal();
+              fetchParents();
+          }
+      } catch (err) {
+          toast.error(err.response?.data?.message || 'Failed to record payment');
+      }
+  };
+
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -116,6 +194,11 @@ const Parents = () => {
     }
   };
 
+  const isOverdue = (payedUntilDate) => {
+      if (!payedUntilDate) return false;
+      return new Date(payedUntilDate) < new Date();
+  };
+
   return (
     <div className="fade-in">
       <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
@@ -137,7 +220,7 @@ const Parents = () => {
                 <tr>
                   <th>{t('parents.name') || 'Name'}</th>
                   <th>{t('parents.contact') || 'Contact Info'}</th>
-                  <th>Given Price</th>
+                  <th>Total Paid (BGN)</th>
                   <th>{t('parents.paidUntil') || 'Payed Until'}</th>
                   <th>Join Time</th>
                   <th>Application Form</th>
@@ -146,7 +229,7 @@ const Parents = () => {
               </thead>
               <tbody>
                 {parents.map((parent) => (
-                  <tr key={parent.id}>
+                  <tr key={parent.id} className={isOverdue(parent.payedUntil) ? 'row-overdue' : ''} style={isOverdue(parent.payedUntil) ? { backgroundColor: '#fee2e2' } : {}}>
                     <td><strong>{parent.firstName} {parent.lastName}</strong></td>
                     <td>
                         <div style={{fontSize:'0.875rem'}}>
@@ -154,8 +237,12 @@ const Parents = () => {
                             <div style={{color:'var(--color-text-secondary)'}}>{parent.phoneNumber}</div>
                         </div>
                     </td>
-                    <td>${parent.givenPrice?.toFixed(2)}</td>
-                    <td>{formatDateForView(parent.payedUntil)}</td>
+                    <td>{parent.totalPaid?.toFixed(2) || '0.00'} лв.</td>
+                    <td>
+                      <span style={{ color: isOverdue(parent.payedUntil) ? '#dc2626' : 'inherit', fontWeight: isOverdue(parent.payedUntil) ? 'bold' : 'normal' }}>
+                         {formatDateForView(parent.payedUntil)}
+                      </span>
+                    </td>
                     <td>{formatDateForView(parent.joinTime)}</td>
                     <td>
                         <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }} title={parent.applicationFormId}>
@@ -164,8 +251,11 @@ const Parents = () => {
                     </td>
                     <td>
                       <div className="flex-end">
+                        <button className="btn btn-success" style={{ padding: '0.25rem 0.5rem', marginRight: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }} onClick={() => openPaymentModal(parent)}>
+                          <DollarSign size={14} /> Pay
+                        </button>
                         <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewKidsParent(parent)}>
-                          <span style={{ fontSize: '14px', marginRight: '4px' }}>👨‍👩‍👧‍👦</span> {t('parents.viewKids') || 'View Kids'}
+                          <span style={{ fontSize: '14px', marginRight: '4px' }}>👨‍👩‍👧‍👦</span> {t('parents.viewKids') || 'Kids'}
                         </button>
                         <button className="btn btn-outline" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openModal(parent)}>
                           <Edit size={14} />
@@ -183,6 +273,7 @@ const Parents = () => {
         )}
       </div>
 
+      {/* Existing Edit/Create Modal */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content fade-in text-left">
@@ -212,8 +303,8 @@ const Parents = () => {
                  </div>
               </div>
               <div className="form-group">
-                  <label className="form-label">Given Price</label>
-                  <input required type="number" step="0.01" name="givenPrice" className="form-input" value={currentParent.givenPrice} onChange={handleChange} />
+                  <label className="form-label">Given Price (Legacy)</label>
+                  <input type="number" step="0.01" name="givenPrice" className="form-input" value={currentParent.givenPrice} onChange={handleChange} />
               </div>
               <div className="grid-2">
                  <div className="form-group">
@@ -239,6 +330,58 @@ const Parents = () => {
               <div className="flex-end" style={{ marginTop: '2rem' }}>
                  <button type="button" className="btn btn-outline" onClick={closeModal}>Cancel</button>
                  <button type="submit" className="btn btn-primary">{currentParent?.parentId ? 'Save Changes' : 'Create'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Modal */}
+      {isPaymentModalOpen && paymentParent && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in text-left" style={{maxWidth: '450px'}}>
+            <div className="flex-between" style={{ marginBottom: '1rem' }}>
+                <h2>Record Payment</h2>
+                <button onClick={closePaymentModal} className="btn-outline" style={{ border:'none', background:'transparent', cursor:'pointer' }}><X size={20}/></button>
+            </div>
+            <form onSubmit={handleRecordPayment}>
+               <div className="form-group">
+                   <label className="form-label">Payment Package</label>
+                   <select 
+                       className="form-select" 
+                       value={paymentType} 
+                       onChange={(e) => setPaymentType(e.target.value)}
+                   >
+                       <option value="full">Monthly Fee (160 лв + sibling discount)</option>
+                       <option value="partial">Single/Partial Lessons (45 лв / lesson)</option>
+                   </select>
+               </div>
+               
+               <div className="form-group">
+                   <label className="form-label">{paymentType === 'full' ? 'Number of Months' : 'Number of Lessons (per child)'}</label>
+                   <input 
+                       type="number" 
+                       min="1" 
+                       className="form-input" 
+                       value={paymentQuantity} 
+                       onChange={(e) => setPaymentQuantity(e.target.value)} 
+                   />
+               </div>
+
+               <div style={{ padding: '1rem', backgroundColor: '#f3f4f6', borderRadius: '0.5rem', margin: '1rem 0' }}>
+                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                       <span>Kids Enrolled:</span>
+                       <strong>{allMembers.filter(m => m.parentId === paymentParent.id && m.status === true).length} active</strong>
+                   </div>
+                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 'bold' }}>
+                       <span>Estimated Total:</span>
+                       <span>{calculatedTotal} лв.</span>
+                   </div>
+               </div>
+
+               <div className="flex-end" style={{ marginTop: '1.5rem' }}>
+                 <button type="button" className="btn btn-outline" onClick={closePaymentModal}>Cancel</button>
+                 <button type="submit" className="btn btn-success">Confirm Payment</button>
               </div>
             </form>
           </div>

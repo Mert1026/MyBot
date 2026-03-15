@@ -2,7 +2,7 @@ import axios from 'axios';
 import i18n from '../i18n';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5206/api',
+  baseURL: 'https://mybot-y0ns.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },

@@ -316,5 +316,52 @@ namespace MyBotApi.Controllers
                 });
             }
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("approve")]
+        public async Task<ActionResult<ApiResponse<bool>>> ApproveApplication([FromBody] ApplicationApprovalDto approvalDto)
+        {
+            try
+            {
+                var form = await _applicationFormRepository.GetByIdAsync(approvalDto.ApplicationFormId);
+                if (form == null) return NotFound(new ApiResponse<bool> { Success = false, Message = "Application form not found" });
+
+                // Find the associated parent
+                var parents = await _parentRepository.GetAllAsync();
+                var parent = parents.FirstOrDefault(p => p.ApplicationFormId == form.Id);
+
+                if (parent == null) return NotFound(new ApiResponse<bool> { Success = false, Message = "Associated parent not found" });
+
+                // Update Parent JoinTime and initial PayedUntil
+                parent.JoinTime = approvalDto.PaymentStartDate;
+                parent.PayedUntil = approvalDto.PaymentStartDate;
+                await _parentRepository.UpdateAsync(parent);
+
+                // Find and activate the kids
+                var kids = await _memberRepository.GetAllByParentIdAsync(parent.Id);
+                foreach (var kid in kids)
+                {
+                    kid.Status = true;
+                    kid.JoinTime = approvalDto.PaymentStartDate;
+                    await _memberRepository.UpdateAsync(kid);
+                }
+
+                return Ok(new ApiResponse<bool>
+                {
+                    Success = true,
+                    Message = "Application approved and members activated successfully",
+                    Data = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error approving application {approvalDto.ApplicationFormId}");
+                return StatusCode(500, new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = $"An error occurred while approving the application - {ex.InnerException?.Message ?? ex.Message}"
+                });
+            }
+        }
     }
 }
