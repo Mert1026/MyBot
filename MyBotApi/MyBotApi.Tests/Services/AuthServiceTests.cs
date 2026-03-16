@@ -206,6 +206,7 @@ public class AuthServiceTests
             Id = Guid.NewGuid(),
             Email = "a@t.com",
             Role = "admin",
+            ImageLink = "http://example.com/image.png",
             EmailVerified = false
         };
         _userRepoMock.Setup(r => r.GetByEmailAsync("a@t.com")).ReturnsAsync(existingUser);

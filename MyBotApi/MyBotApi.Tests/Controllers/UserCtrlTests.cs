@@ -62,6 +62,7 @@ public class UserCtrlTests
         Email = email,
         DisplayName = "Alice",
         Role = role,
+        ImageLink = "http://example.com/image.png",
         EmailVerified = true
     };
 
@@ -89,7 +90,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_ValidAdminRequest_ReturnsOk()
     {
-        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A"};
+        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A", Role = "admin"};
         _authServiceMock.Setup(s => s.SignUpAsync(request)).ReturnsAsync(MakeAuthResponse());
 
         var result = await _controller.SignUp(request);
@@ -101,7 +102,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_ValidTeacherRequest_ReturnsOk()
     {
-        var request = new SignUpRequest { Email = "t@t.com", Password = "pass", DisplayName = "T"};
+        var request = new SignUpRequest { Email = "t@t.com", Password = "pass", DisplayName = "T", Role = "teacher"};
         _authServiceMock.Setup(s => s.SignUpAsync(request)).ReturnsAsync(MakeAuthResponse());
 
         var result = await _controller.SignUp(request);
@@ -112,7 +113,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_InvalidRole_ReturnsBadRequest()
     {
-        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A"};
+        var request = new SignUpRequest { Email = "a@t.com", Password = "pass", DisplayName = "A", Role = "invalid"};
 
         var result = await _controller.SignUp(request);
 
@@ -122,7 +123,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_InvalidRole_SuccessIsFalse()
     {
-        var request = new SignUpRequest {Email = "a@t.com", Password = "p", DisplayName = "A" };
+        var request = new SignUpRequest {Email = "a@t.com", Password = "p", DisplayName = "A", Role = "invalid" };
 
         var result = await _controller.SignUp(request);
 
@@ -133,7 +134,7 @@ public class UserCtrlTests
     [Test]
     public async Task SignUp_WhenServiceThrows_ReturnsBadRequest()
     {
-        var request = new SignUpRequest { Email = "a@t.com", Password = "p", DisplayName = "A"};
+        var request = new SignUpRequest { Email = "a@t.com", Password = "p", DisplayName = "A", Role = "admin"};
         _authServiceMock.Setup(s => s.SignUpAsync(request)).ThrowsAsync(new Exception("Nhost down"));
 
         var result = await _controller.SignUp(request);

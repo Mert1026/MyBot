@@ -1,0 +1,81 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  MyBotApi.GCommon -> C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.GCommon\bin\Debug\net8.0\MyBotApi.GCommon.dll
+  MyBotApi.Data.Models -> C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data.Models\bin\Debug\net8.0\MyBotApi.Data.Models.dll
+  MyBotApi.Data -> C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277: Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277: There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=8.0.23.0, Culture=neutral, PublicKeyToken=adb9793829ddae60". [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     "Microsoft.EntityFrameworkCore.Relational, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=8.0.23.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll]. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:         C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll". [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=8.0.23.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" []. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:         C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll". [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\MyBotApi.Services.csproj]
+  MyBotApi.Services -> C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\bin\Debug\net8.0\MyBotApi.Services.dll
+  MyBotApi -> C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi\bin\Debug\net8.0\MyBotApi.dll
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277: Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277: There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=8.0.23.0, Culture=neutral, PublicKeyToken=adb9793829ddae60". [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     "Microsoft.EntityFrameworkCore.Relational, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=8.0.23.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll]. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:         C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll". [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\merte\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.11\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=8.0.23.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" []. [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:         C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll". [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Data\bin\Debug\net8.0\MyBotApi.Data.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi\bin\Debug\net8.0\MyBotApi.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Services\bin\Debug\net8.0\MyBotApi.Services.dll [C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\MyBotApi.Tests.csproj]
+  MyBotApi.Tests -> C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\bin\Debug\net8.0\MyBotApi.Tests.dll
+Test run for C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\bin\Debug\net8.0\MyBotApi.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed CreateMemberAsync_ValidDto_ReturnsOkWithMember [28 ms]
+  Error Message:
+     Assert.That(result.Result, Is.InstanceOf<OkObjectResult>())
+  Expected: instance of <Microsoft.AspNetCore.Mvc.OkObjectResult>
+  But was:  <Microsoft.AspNetCore.Mvc.NotFoundObjectResult>
+
+  Stack Trace:
+     at MyBotApi.Tests.MemberCtrlTests.CreateMemberAsync_ValidDto_ReturnsOkWithMember() in C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\Controllers\MemberCtrlTests.cs:line 158
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.GetResult()
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await[TResult](TestExecutionContext context, Func`1 invoke)
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(TestExecutionContext context, Func`1 invoke)
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.RunTestMethod(TestExecutionContext context)
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute(TestExecutionContext context)
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.<>c__DisplayClass1_0.<Execute>b__0()
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+
+1)    at MyBotApi.Tests.MemberCtrlTests.CreateMemberAsync_ValidDto_ReturnsOkWithMember() in C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\Controllers\MemberCtrlTests.cs:line 158
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at MyBotApi.Tests.MemberCtrlTests.CreateMemberAsync_ValidDto_ReturnsOkWithMember()
+
+
+  Failed UpdateMemberAsync_InvalidMemberId_ReturnsNotFound [1 ms]
+  Error Message:
+     Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>())
+  Expected: instance of <Microsoft.AspNetCore.Mvc.NotFoundObjectResult>
+  But was:  <Microsoft.AspNetCore.Mvc.ObjectResult>
+
+  Stack Trace:
+     at MyBotApi.Tests.MemberCtrlTests.UpdateMemberAsync_InvalidMemberId_ReturnsNotFound() in C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\Controllers\MemberCtrlTests.cs:line 223
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.GetResult()
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await[TResult](TestExecutionContext context, Func`1 invoke)
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(TestExecutionContext context, Func`1 invoke)
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.RunTestMethod(TestExecutionContext context)
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute(TestExecutionContext context)
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.<>c__DisplayClass1_0.<Execute>b__0()
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+
+1)    at MyBotApi.Tests.MemberCtrlTests.UpdateMemberAsync_InvalidMemberId_ReturnsNotFound() in C:\Users\merte\Documents\GitHub\MyBot\MyBotApi\MyBotApi.Tests\Controllers\MemberCtrlTests.cs:line 223
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at MyBotApi.Tests.MemberCtrlTests.UpdateMemberAsync_InvalidMemberId_ReturnsNotFound()
+
+
+
+Failed!  - Failed:     2, Passed:   129, Skipped:     0, Total:   131, Duration: 1 s - MyBotApi.Tests.dll (net8.0)

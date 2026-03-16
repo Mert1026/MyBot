@@ -34,6 +34,7 @@ public class GroupRepoTests
         Id = Guid.NewGuid(),
         Email = $"{Guid.NewGuid()}@test.com",
         Role = "admin",
+        ImageLink = "http://example.com/image.png",
         CreatedAt = DateTime.UtcNow
     };
 
@@ -41,12 +42,16 @@ public class GroupRepoTests
     {
         Id = Guid.NewGuid(),
         Name = name,
-        Description = "Test group",
+        Description = "Test group description", // required
         StartAsHour = "08:00",
         EndAsHour = "10:00",
         CreatedAt = DateTimeOffset.UtcNow,
         UserId = userId,
-        IsDeleted = false
+        IsDeleted = false,
+        Location = "Test Location", // required
+        MaxMembers = 20, // required
+        MinAge = 5, // required
+        MaxAge = 15 // required
     };
 
     [Test]

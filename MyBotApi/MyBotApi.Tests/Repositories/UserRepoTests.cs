@@ -41,6 +41,7 @@ public class UserRepoTests
             Email = email ?? $"{Guid.NewGuid()}@test.com",
             DisplayName = "Test User",
             Role = role,
+            ImageLink = "http://example.com/image.png",
             EmailVerified = true,
             NhostUserId = nhostId,
             CreatedAt = DateTime.UtcNow

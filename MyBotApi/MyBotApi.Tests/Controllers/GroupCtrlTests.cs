@@ -39,7 +39,11 @@ public class GroupCtrlTests
         StartAsHour = "08:00",
         EndAsHour = "10:00",
         CreatedAt = DateTimeOffset.UtcNow,
-        UserId = Guid.NewGuid()
+        UserId = Guid.NewGuid(),
+        Location = "Test Location", // required
+        MaxMembers = 20, // required
+        MinAge = 5, // required
+        MaxAge = 15 // required
     };
 
     private static GroupDto MakeGroupDto(string name = "Alpha", Guid? userId = null) => new GroupDto
@@ -48,7 +52,11 @@ public class GroupCtrlTests
         Description = "desc",
         StartAsHour = "08:00",
         EndAsHour = "10:00",
-        UserId = (userId ?? Guid.NewGuid()).ToString()
+        UserId = (userId ?? Guid.NewGuid()).ToString(),
+        Location = "Test Location", // required
+        MaxMembers = 20, // required
+        MinAge = 5, // required
+        MaxAge = 15 // required
     };
 
     private static T GetData<T>(ActionResult<ApiResponse<T>> result)
@@ -205,7 +213,7 @@ public class GroupCtrlTests
         var dto = MakeGroupDto("New", userId);
 
         _groupRepoMock.Setup(r => r.GetByNameAsync("Old")).ReturnsAsync(group);
-        _userRepoMock.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(new User { Id = userId, Email = "u@t.com", Role = "admin" });
+        _userRepoMock.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(new User { Id = userId, Email = "u@t.com", Role = "admin", ImageLink = "http://example.com/image.png" });
         _groupRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Group>())).ReturnsAsync((Group g) => g);
 
         var result = await _controller.UpdateGroup("Old", dto);
