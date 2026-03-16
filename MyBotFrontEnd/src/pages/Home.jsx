@@ -6,6 +6,8 @@ import { Menu, X } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../utils/api';
 import Footer from '../components/Footer';
+import PublicNavbar from '../components/PublicNavbar';
+import FallingBlocks from '../components/FallingBlocks';
 import './Home.css';
 import logo from '../assets/logo.png';
 import photo1 from '../assets/photo_1.jpg';
@@ -19,18 +21,7 @@ const courseImages = [photo2, photo3, photo4, photo5, photo1];
 const Home = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [groups, setGroups] = useState([]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -46,103 +37,15 @@ const Home = () => {
     fetchGroups();
   }, []);
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
-
-  const navLinks = [
-    { name: t('nav.about'), href: '#about' },
-    { name: t('nav.trainings'), href: '#trainings' },
-    { name: t('nav.locationsContacts'), href: '#locations' }
-  ];
-
   const displayedGroups = groups.slice(0, 3);
 
   return (
     <div className="home-wrapper">
-      {/* Front-end Navbar */}
-      <motion.nav 
-        className={`home-nav ${isScrolled ? 'scrolled' : ''}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="home-nav-container">
-          <div className="home-logo" onClick={() => window.scrollTo(0,0)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src={logo} alt="MyBot Logo" style={{ height: '50px', width: 'auto' }} />
-            <span style={{ fontWeight: 'bold', fontSize: '1.2rem', letterSpacing: '1px' }}>MyBot</span>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="home-nav-links desktop-only">
-            {navLinks.map((link, idx) => (
-              <a key={idx} href={link.href} className="home-nav-link">
-                {link.name}
-              </a>
-            ))}
-          </div>
-
-          <div className="home-nav-actions desktop-only">
-             <div className="home-lang-toggle">
-                <button onClick={() => changeLanguage('en')} className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}>EN</button>
-                <button onClick={() => changeLanguage('bg')} className={`lang-btn ${i18n.language === 'bg' ? 'active' : ''}`}>BG</button>
-             </div>
-             
-             {user ? (
-                <button className="base-btn outline-btn" onClick={() => navigate('/dashboard')} style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                  {t('nav.dashboard')}
-                </button>
-             ) : (
-                <button className="base-btn outline-btn" onClick={() => navigate('/login')}>
-                  Admin
-                </button>
-             )}
-          </div>
-
-          {/* Mobile Toggle */}
-          <div className="mobile-toggle mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-             {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-          </div>
-        </div>
-
-        {/* Mobile Menu Dropdown */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div 
-              className="mobile-menu mobile-only"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              <div className="mobile-nav-links">
-                {navLinks.map((link, idx) => (
-                  <a key={idx} href={link.href} onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">
-                    {link.name}
-                  </a>
-                ))}
-                <div className="mobile-nav-actions">
-                  <div className="home-lang-toggle" style={{ justifyContent: 'center', marginBottom: '1rem' }}>
-                    <button onClick={() => changeLanguage('en')} className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}>EN</button>
-                    <button onClick={() => changeLanguage('bg')} className={`lang-btn ${i18n.language === 'bg' ? 'active' : ''}`}>BG</button>
-                  </div>
-                  {user ? (
-                    <button className="base-btn outline-btn w-full mt-2" onClick={() => navigate('/dashboard')} style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                      {t('nav.dashboard')}
-                    </button>
-                  ) : (
-                    <button className="base-btn outline-btn w-full mt-2" onClick={() => navigate('/login')}>
-                      Admin Portal
-                    </button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+      <PublicNavbar />
 
       {/* Hero Section */}
       <section className="hero-section">
+          <FallingBlocks count={16} section="hero" />
           <div className="hero-container">
             <motion.div 
               className="hero-content"
@@ -182,6 +85,7 @@ const Home = () => {
       </section>
 
       <section id="about" className="about-section">
+         <FallingBlocks count={12} section="about" />
          <div className="about-container">
             <motion.div 
                className="section-header"
@@ -247,6 +151,7 @@ const Home = () => {
 
       {/* Trainings Section - Shows last 3 groups from DB */}
       <section id="trainings" className="trainings-section">
+         <FallingBlocks count={10} section="trainings" />
          <div className="trainings-container">
             <motion.div 
                className="section-header"
@@ -274,8 +179,8 @@ const Home = () => {
                      <div className="course-content">
                         <h3>{group.name}</h3>
                         <p>{group.description || t('common.noData')}</p>
-                        <p style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#64748b' }}>
-                          {group.dayOfWeek && `${group.dayOfWeek}`}{group.startAsHour && ` · ${group.startAsHour} - ${group.endAsHour}`}{group.location && ` · ${group.location}`}
+                         <p style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#636e72' }}>
+                           {group.dayOfWeek && `${group.dayOfWeek}`}{group.startAsHour && ` · ${group.startAsHour} - ${group.endAsHour}`}{group.location && ` · ${group.location}`}
                         </p>
                      </div>
                    </motion.div>
@@ -319,6 +224,7 @@ const Home = () => {
 
       {/* Locations Section */}
       <section id="locations" className="contact-section">
+         <FallingBlocks count={10} section="locations" />
          <div className="contact-container">
             <motion.div 
                className="section-header"

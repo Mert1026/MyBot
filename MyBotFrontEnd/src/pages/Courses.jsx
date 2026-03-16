@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import Navbar from '../components/Navbar';
+import PublicNavbar from '../components/PublicNavbar';
 import Footer from '../components/Footer';
+import FallingBlocks from '../components/FallingBlocks';
 import './Home.css';
 
 import photo1 from '../assets/photo_1.jpg';
@@ -39,9 +40,11 @@ const Courses = () => {
   }, []);
 
   return (
-    <div className="home-wrapper" style={{ paddingTop: '80px' }}>
-      <section className="trainings-section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: '40px' }}>
-         <div className="trainings-container" style={{ flexGrow: 1 }}>
+    <div className="home-wrapper">
+      <PublicNavbar />
+      <section className="trainings-section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: '140px', position: 'relative', overflow: 'hidden' }}>
+         <FallingBlocks count={16} section="allcourses" />
+         <div className="trainings-container" style={{ flexGrow: 1, position: 'relative', zIndex: 10 }}>
             
             <motion.div 
                className="section-header"
@@ -50,15 +53,15 @@ const Courses = () => {
                viewport={{ once: true }}
             >
                <h2 className="section-title" dangerouslySetInnerHTML={{ __html: t('trainings.allCourses') || 'All <span>Courses</span>' }}></h2>
-               <p style={{ color: '#94a3b8', fontSize: '1.2rem', marginTop: '1rem', maxWidth: '600px', margin: '1rem auto' }}>
+               <p style={{ color: '#636e72', fontSize: '1.2rem', marginTop: '2rem', maxWidth: '600px', margin: '2rem auto' }}>
                  {t('trainings.allCoursesSubtitle') || 'Browse all available groups and courses'}
                </p>
             </motion.div>
 
             {loading ? (
-              <p style={{ textAlign: 'center', color: '#94a3b8' }}>{t('common.loading')}</p>
+              <p style={{ textAlign: 'center', color: '#636e72' }}>{t('common.loading')}</p>
             ) : groups.length === 0 ? (
-              <p style={{ textAlign: 'center', color: '#94a3b8' }}>{t('common.noData')}</p>
+              <p style={{ textAlign: 'center', color: '#636e72' }}>{t('common.noData')}</p>
             ) : (
               <div className="courses-grid" style={{ marginTop: '3rem' }}>
                 {groups.map((group, idx) => (
@@ -76,7 +79,7 @@ const Courses = () => {
                     <div className="course-content">
                        <h3>{group.name}</h3>
                        <p>{group.description || t('common.noData')}</p>
-                       <div style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#64748b' }}>
+                       <div style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#636e72' }}>
                          <p>{group.dayOfWeek && `${group.dayOfWeek}`}{group.startAsHour && ` · ${group.startAsHour} - ${group.endAsHour}`}{group.location && ` · ${group.location}`}</p>
                        </div>
                        <button 

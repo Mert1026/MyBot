@@ -2,19 +2,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 60px); /* Minus navbar if visible, though usually hidden */
-  background-color: var(--color-background);
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(135deg, #FFF9E6 0%, #F0F8FF 50%, #FFF0F5 100%);
   padding: 2rem;
 }
 
 .login-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  border: 2px solid var(--color-border);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(77, 150, 255, 0.1);
   width: 100%;
   max-width: 400px;
   padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rainbow top bar */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-secondary), #FFD93D, #6BCB77, #4D96FF, #FF8FD8);
 }
 
 .login-header {
@@ -50,4 +61,17 @@
   margin-top: 1rem;
   padding: 0.75rem;
   font-size: 1rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--color-secondary), #0EA5E9);
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Baloo 2', cursive;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
 }

@@ -1,0 +1,97 @@
+/* Falling / Floating Blocks — purely decorative animated shapes */
+
+.falling-blocks-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.falling-block {
+  position: absolute;
+  opacity: 0.18;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Shape types */
+.falling-block.circle { border-radius: 50%; }
+.falling-block.square { border-radius: 6px; }
+.falling-block.triangle {
+  width: 0 !important; height: 0 !important;
+  background: transparent !important;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 32px solid currentColor;
+}
+.falling-block.star {
+  background: transparent !important;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.falling-block.gear {
+  border-radius: 4px;
+  clip-path: polygon(50% 0%, 63% 10%, 75% 0%, 80% 15%, 95% 15%, 90% 30%, 100% 40%, 88% 50%, 100% 60%, 90% 70%, 95% 85%, 80% 85%, 75% 100%, 63% 90%, 50% 100%, 37% 90%, 25% 100%, 20% 85%, 5% 85%, 10% 70%, 0% 60%, 12% 50%, 0% 40%, 10% 30%, 5% 15%, 20% 15%, 25% 0%, 37% 10%);
+}
+
+/* Float animation — slow gentle drift downwards */
+@keyframes floatDown {
+  0% {
+    transform: translateY(-80px) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(calc(100vh + 80px)) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Gentle sway left-right while floating */
+@keyframes sway {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(30px); }
+  75% { transform: translateX(-30px); }
+}
+
+/* Spin in place */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Drift animation — combines float + sway */
+@keyframes drift {
+  0% {
+    transform: translateY(-60px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.2; }
+  25% { transform: translateY(25vh) translateX(25px) rotate(90deg); }
+  50% { transform: translateY(50vh) translateX(-15px) rotate(180deg); }
+  75% { transform: translateY(75vh) translateX(20px) rotate(270deg); }
+  90% { opacity: 0.12; }
+  100% {
+    transform: translateY(calc(100vh + 60px)) translateX(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Bobbing in place for a more relaxed variant */
+@keyframes bob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-20px) rotate(15deg);
+    opacity: 0.22;
+  }
+}
+
+/* Size-dependent animation assignment (applied via inline styles in component) */
