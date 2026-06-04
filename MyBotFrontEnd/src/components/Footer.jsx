@@ -74,22 +74,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Made by */}
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px dashed #e0e0e0' }}>
-          <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-            Made by{' '}
-            <a
-              href="https://www.instagram.com/mert__10.e/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'var(--color-secondary)', textDecoration: 'none', fontWeight: 700, transition: 'color 0.2s' }}
-              onMouseEnter={e => e.target.style.color = '#4D96FF'}
-              onMouseLeave={e => e.target.style.color = 'var(--color-secondary)'}
-            >
-              Mert Elsenev
-            </a>
-          </p>
-        </div>
       </div>
     </footer>
   );

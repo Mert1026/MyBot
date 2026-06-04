@@ -10,6 +10,7 @@ import PublicNavbar from '../components/PublicNavbar';
 import FallingBlocks from '../components/FallingBlocks';
 import './Home.css';
 import logo from '../assets/logo.png';
+import robolinkLogo from '../assets/Robolink_assets/robolink_logo.png';
 import photo1 from '../assets/photo_1.jpg';
 import photo2 from '../assets/photo_2.jpg';
 import photo3 from '../assets/photo_3.jpg';
@@ -93,7 +94,11 @@ const Home = () => {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
             >
-               <img src={logo} alt="MyBot Mascot" style={{ height: '60px', marginBottom: '1rem', filter: 'drop-shadow(0 0 10px rgba(33, 150, 243, 0.3))' }} />
+               <div className="about-logos-wrapper">
+                 <img src={logo} alt="MyBot Mascot" style={{ height: '60px', filter: 'drop-shadow(0 0 10px rgba(33, 150, 243, 0.3))' }} />
+                 <div className="logo-separator" style={{ width: '2px', height: '50px', backgroundColor: '#e2e8f0' }}></div>
+                 <img src={robolinkLogo} alt="Robolink Logo" style={{ height: '100px', width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+               </div>
                <h2 className="section-title" dangerouslySetInnerHTML={{ __html: t('about.title') }}></h2>
             </motion.div>
 
@@ -144,6 +149,22 @@ const Home = () => {
                  </div>
                  <h3>{t('about.feature2Title')}</h3>
                  <p>{t('about.feature2Desc')}</p>
+               </motion.div>
+
+               <motion.div 
+                 className="feature-card"
+                 initial={{ opacity: 0, y: 30 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ delay: 0.4 }}
+               >
+                 <div className="feature-icon-wrapper">
+                    <svg className="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24">
+                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                 </div>
+                 <h3>{t('about.robolinkTitle')}</h3>
+                 <p>{t('about.robolinkDesc')}</p>
                </motion.div>
             </div>
          </div>
@@ -219,6 +240,26 @@ const Home = () => {
                 </button>
               </div>
             )}
+         </div>
+      </section>
+
+      {/* Redirect to Sales Section */}
+      <section className="sales-redirect-section">
+         <div className="sales-redirect-container">
+            <motion.div 
+               className="sales-redirect-content"
+               initial={{ opacity: 0, scale: 0.95 }}
+               whileInView={{ opacity: 1, scale: 1 }}
+               viewport={{ once: true }}
+               style={{ color: '#ffffff' }}
+            >
+               <img src={robolinkLogo} alt="Robolink Logo" style={{ height: '80px', width: 'auto', maxWidth: '100%', objectFit: 'contain', marginBottom: '1.5rem' }} />
+               <h2 style={{ color: '#ffffff' }}>{t('sales.redirectTitle')}</h2>
+               <p style={{ color: '#ffffff' }}>{t('sales.redirectDesc')}</p>
+               <button className="hero-btn-primary" style={{ border: 'none', cursor: 'pointer' }} onClick={() => navigate('/sales')}>
+                 {t('sales.redirectBtn')}
+               </button>
+            </motion.div>
          </div>
       </section>
 

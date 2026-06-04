@@ -6,7 +6,9 @@
         "feature1Title": "Advanced Curriculum",
         "feature1Desc": "Structured learning paths from fundamental block programming to advanced algorithms and robotics design.",
         "feature2Title": "Expert Mentors",
-        "feature2Desc": "Guided by experienced instructors passionate about technology and student development."
+        "feature2Desc": "Guided by experienced instructors passionate about technology and student development.",
+        "robolinkTitle": "Robolink Partnership",
+        "robolinkDesc": "Official partners with Robolink to bring the best educational robotics kits to our curriculum."
     },
     "locations": {
         "title": "Our <span>Locations</span>",
@@ -22,9 +24,9 @@
         "course1": "Robotics Fundamentals",
         "course1Desc": "Introduction to robot building and visual programming for beginners.",
         "course2": "Programming Masterclass",
-        "course2Desc": "Advanced software concepts, Python, and algorithmic integration.",
+        "course2Desc": "Development of complex robotic projects, suitable for advanced students.",
         "course3": "Engineering & Hardware",
-        "course3Desc": "Soldering, PCB design, and custom electronics construction.",
+        "course3Desc": "Programming of Arduino UNO type boards and building intelligent devices.",
         "showMore": "Show More",
         "allCourses": "All <span>Courses</span>",
         "allCoursesSubtitle": "Browse all available groups and courses"

@@ -17,7 +17,7 @@ const Navbar = () => {
       <div className="navbar-container">
         <div className="navbar-brand">
           <BookOpen size={24} className="navbar-logo-icon" />
-          <span className="navbar-title">MyBot Admin</span>
+          <span className="navbar-title">MyBot Robotics Admin</span>
         </div>
         
         <div className="navbar-links">

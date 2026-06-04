@@ -69,16 +69,43 @@ const ApplicationForm = () => {
     setLoading(true);
     
     try {
-      const res = await api.post('/ApplicationForms/create', formData);
-      if (res.data.success) {
+      const formattedKids = formData.kids.map((kid, index) => 
+        `Child ${index + 1}: ${kid.firstName} ${kid.lastName} (Age: ${kid.age})`
+      ).join('\n');
+
+      const payload = {
+        access_key: 'fb3ca2cb-b7dc-4547-884c-1b27b4fdc670',
+        subject: 'New Student Application Form',
+        from_name: 'MyBot Website',
+        "Parent Name": `${formData.parentFirstName} ${formData.parentLastName}`,
+        "Email": formData.email,
+        "Phone": formData.phoneNumber,
+        "City": formData.location,
+        "Children Details": formattedKids
+      };
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
         toast.success(t('apply.success') || 'Application submitted successfully! We will contact you soon.');
         setFormData({ parentFirstName: '', parentLastName: '', phoneNumber: '', email: '', location: '', kids: [{ firstName: '', lastName: '', age: '' }] });
         setCaptchaToken(null);
         if (recaptchaRef.current) recaptchaRef.current.reset();
         setTimeout(() => navigate('/'), 2000);
+      } else {
+        toast.error('Failed to submit application. Please try again later.');
       }
     } catch (error) {
-       toast.error(error.response?.data?.message || 'Failed to submit application. Please try again later.');
+       toast.error('Failed to submit application. Please try again later.');
     } finally {
       setLoading(false);
     }

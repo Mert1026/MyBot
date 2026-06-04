@@ -16,6 +16,7 @@ import Courses from './pages/Courses';
 import ApplicationForm from './pages/ApplicationForm';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import Sales from './pages/Sales';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -43,6 +44,7 @@ function App() {
           <Route path="/apply" element={<ApplicationForm />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/sales" element={<Sales />} />
           <Route path="/login" element={
             <main className="main-content">
                <Login />

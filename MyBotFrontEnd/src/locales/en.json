@@ -10,11 +10,12 @@
     "trainings": "Active Courses",
     "events": "Events",
     "locationsContacts": "Locations & Contacts",
-    "home": "Home"
+    "home": "Home",
+    "sales": "Shop"
   },
   "hero": {
     "title": "MyBot Robotics \n\n Future Innovators of Tomorrow",
-    "tagline": "Empowering youth through advanced robotics and programming education.",
+    "tagline": "Learning advanced robotics and programming.",
     "shop": "Shop Now",
     "apply": "Apply Now"
   },
@@ -203,5 +204,39 @@
   "Parent is not found": "Parent is not found",
   "User id is not valid": "User id is not valid",
   "Group or user not found": "Group or user not found",
-  "Invalid member id": "Invalid member id"
+  "Invalid member id": "Invalid member id",
+  "sales": {
+    "title": "CoDrone EDU",
+    "subtitle": "The programmable drone designed for learning!",
+    "desc": "Made for education, both home & in school, the CoDrone EDU is perfect for children to get excited to learn. Ready to fly right out of the box, children can fly, dive, and do flips, then learn how to create their own custom code in Python or block-based programming.",
+    "feature1": "Color sensors",
+    "feature2": "Front and bottom range sensors",
+    "feature3": "Python & Block programming",
+    "feature4": "Durable and safe for students",
+    "price": "$249.00",
+    "buyBtn": "Purchase Now",
+    "formTitle": "Ask about CoDrone EDU",
+    "formName": "Full Name",
+    "formEmail": "Email Address",
+    "formQuestion": "Question",
+    "submitQuestion": "Submit",
+    "questionSuccess": "Your request has been submitted. We will contact you shortly!",
+    "questionError": "There was an error submitting your request. Please try again.",
+    "redirectTitle": "Get the CoDrone EDU",
+    "redirectDesc": "Enhance your learning experience with a programmable drone designed specifically for education.",
+    "redirectBtn": "Go to Shop",
+    "detailsBtn": "Details",
+    "includedTitle": "What's included in the Individual kit",
+    "includedItem1": "1 CoDrone EDU",
+    "includedItem2": "1 Smart Controller (2x AA batteries not included)",
+    "includedItem3": "2 rechargeable batteries",
+    "includedItem4": "1 two-battery charger",
+    "includedItem5": "1 micro USB cable",
+    "includedItem6": "1 propeller removal tool",
+    "includedItem7": "1 set of extra propellers (2 clockwise, 2 counter-clockwise)",
+    "includedItem8": "1 screw driver, extra screws and bolts",
+    "includedItem9": "1 Quickstart Guide",
+    "includedItem10": "1 set of drone and controller labels",
+    "includedItem11": "8 color landing pads"
+  }
 }
