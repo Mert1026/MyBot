@@ -121,7 +121,3 @@ The project is optimized for deployment on Apache-based hosting environments.
 ## 📄 License
 
 This project is proprietary and intended for the internal use of **MyBot Robotics**.
-
----
-
-*Made with ❤️ for the future innovators.*
